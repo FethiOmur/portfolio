@@ -3,11 +3,22 @@
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { FeatureCarousel } from "@/components/ui/animated-feature-carousel"
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
+const withBase = (p: string) => (p.startsWith("http") ? p : `${basePath}${p}`)
+import { SplashCursor } from "@/components/ui/splash-cursor"
 
 export default function Home() {
   const [isDark, setIsDark] = useState(true)
   const [activeSection, setActiveSection] = useState("")
+  const [hintedSection, setHintedSection] = useState<string | null>(null)
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual"
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" })
+  }, [])
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark)
@@ -33,6 +44,13 @@ export default function Home() {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    if (!activeSection) return
+    setHintedSection(activeSection)
+    const timer = setTimeout(() => setHintedSection(null), 1500)
+    return () => clearTimeout(timer)
+  }, [activeSection])
+
   const toggleTheme = () => {
     setIsDark(!isDark)
   }
@@ -46,6 +64,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground relative">
+      <SplashCursor />
       <div className="fixed top-8 right-8 z-20">
         <button
           onClick={toggleTheme}
@@ -87,7 +106,9 @@ export default function Home() {
                 }`}
                 aria-label={`Navigate to ${section.label}`}
               />
-              <div className="absolute left-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+              <div className={`absolute left-6 top-1/2 -translate-y-1/2 transition-opacity duration-300 pointer-events-none ${
+                hintedSection === section.id ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+              }`}>
                 <div className="bg-foreground text-background px-2 py-1 rounded text-sm whitespace-nowrap">
                   {section.label}
                 </div>
@@ -100,7 +121,7 @@ export default function Home() {
       <main className="max-w-4xl mx-auto px-8 lg:px-16">
         <header
           id="intro"
-          ref={(el) => (sectionsRef.current[0] = el)}
+          ref={(el) => { sectionsRef.current[0] = el }}
           className="min-h-screen flex items-center opacity-0"
         >
           <div className="grid lg:grid-cols-5 gap-16 w-full">
@@ -127,7 +148,7 @@ export default function Home() {
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     Available for work
                   </div>
-                  <div>Turin, Italy</div>
+                  <div>Turin & Milan, Italy</div>
                 </div>
               </div>
             </div>
@@ -159,7 +180,7 @@ export default function Home() {
           </div>
         </header>
 
-        <section id="work" ref={(el) => (sectionsRef.current[1] = el)} className="min-h-screen py-32 opacity-0">
+        <section id="work" ref={(el) => { sectionsRef.current[1] = el }} className="min-h-screen py-32 opacity-0">
           <div className="space-y-16">
             <div className="flex items-end justify-between">
               <h2 className="text-4xl font-light">Selected Work</h2>
@@ -173,39 +194,39 @@ export default function Home() {
                   role: "Advanced AI Data Trainer",
                   company: "Outlier",
                   description:
-                    "Collaborating with AI researchers to develop and fine-tune large language models, ensuring accurate and ethical AI outputs.",
-                  tech: ["LLMs", "Model Evaluation", "Data Augmentation"],
+                    "Collaborated with AI researchers to fine-tune LLMs, ran systematic evaluations (reasoning, grading), and monitored bias/ethics. Built data augmentation and QC pipelines to improve robustness and clarity of model outputs.",
+                  tech: ["LLMs", "Model Evaluation", "Bias Monitoring", "Reasoning Grading", "Data Augmentation", "Ethical Alignment"],
                 },
                 {
                   year: "2024",
                   role: "AI Engineer",
                   company: "Neurolanche X Labs",
                   description:
-                    "Automated data pipelines for LLM fine-tuning, optimized model training with Azure AI Studio and AWS.",
-                  tech: ["Python", "Azure AI", "Docker", "REST APIs"],
+                    "Automated data pipelines for LLM fine-tuning with REST APIs and containerized microservices. Trained/served models on Azure AI Studio & AWS with quantization and GPU acceleration; built TTS/STT APIs and processed video transcripts for conversational AI at scale.",
+                  tech: ["Python", "REST APIs", "Docker", "Microservices", "Azure AI", "AWS", "Quantization","TTS/STT", "Flutter"],
                 },
                 {
                   year: "2022",
                   role: "Software Trainee",
-                  company: "Google Turkey AI Academy",
+                  company: "Google Turkey AI and Technology Academy",
                   description:
-                    "Managed full lifecycle of production-grade automation projects with microservices architectures.",
-                  tech: ["REST APIs", "CI/CD", "Microservices"],
+                    "Delivered a production-grade automation project end-to-end; designed CI/CD, conducted load testing, and performed feasibility & risk assessments to ensure reliable, scalable services.",
+                  tech: ["REST APIs", "Microservices", "CI/CD","Flutter", "Load Testing"],
                 },
                 {
                   year: "2022",
                   role: "Unity Game Developer",
                   company: "Gamebow",
-                  description: "Developed four hyper-casual games with over 10,000 downloads each in the first month.",
-                  tech: ["Unity", "C#", "Game Development"],
+                  description: "Developed four hyper‑casual games; each surpassed 10,000 downloads in the first month and improved player engagement through iterative design.",
+                  tech: ["Unity", "C#", "Game Design"],
                 },
                 {
                   year: "2020",
                   role: "CEO & Founder",
                   company: "Inodea Information Tech",
                   description:
-                    "Founded smart parking solutions startup, secured $125K investment with $600K valuation.",
-                  tech: ["IoT", "System Architecture", "Leadership"],
+                    "Founded smart parking startup; designed core IoT architecture with real‑time analytics and secured $125K investment at a $600K valuation (Top 50 at ITU Çekirdek Big Bang).",
+                  tech: ["IoT", "Real‑time Analytics", "System Architecture", "Leadership"],
                 },
               ].map((job, index) => (
                 <div
@@ -242,25 +263,28 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="thoughts" ref={(el) => (sectionsRef.current[2] = el)} className="min-h-screen py-32 opacity-0">
+        <section id="thoughts" ref={(el) => { sectionsRef.current[2] = el }} className="min-h-screen py-32 opacity-0">
           <div className="space-y-16">
             <h2 className="text-4xl font-light">Projects</h2>
 
             <FeatureCarousel
               image={{
                 alt: "AI Project Screenshot",
-                step1img1: "/llm-fine-tuning-dashboard.png",
-                step1img2: "/ai-model-training-interface.png",
-                step2img1: "/smart-parking-iot.png",
-                step2img2: "/mobile-app-interface.png",
-                step3img: "/unity-interface.png",
-                step4img: "/ai-data-pipeline.png",
+                step1img1: withBase("/llm-fine-tuning-dashboard.png"),
+                step1img2: withBase("/ai-model-training-interface.png"),
+                step2img1: withBase("/smart-parking-iot.png"),
+                step2img2: withBase("/mobile-app-interface.png"),
+                step3img: withBase("/unity-interface.png"),
+                step4img: withBase("/ai-data-pipeline.png"),
+                step5img: withBase("/unity-interface.png"),
+                step6img1: withBase("/unity-interface.png"),
+                step6img2: withBase("/mobile-app-interface.png"),
               }}
             />
           </div>
         </section>
 
-        <section id="connect" ref={(el) => (sectionsRef.current[3] = el)} className="py-32 opacity-0">
+        <section id="connect" ref={(el) => { sectionsRef.current[3] = el }} className="py-32 opacity-0">
           <div className="grid lg:grid-cols-2 gap-16">
             <div className="space-y-8">
               <h2 className="text-4xl font-light">Let's Connect</h2>

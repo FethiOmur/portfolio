@@ -23,6 +23,13 @@ const cn = (...classes: (string | boolean | undefined)[]) => {
 // Placeholder for image assets if they are not found.
 const placeholderImage = (text = "Image") => `https://placehold.co/600x400/1a1a1a/ffffff?text=${text}`
 
+// Base path helper for GitHub Pages (project subpath)
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
+const withBase = (p: string) => {
+  if (!p) return p
+  return p.startsWith("http") ? p : `${basePath}${p}`
+}
+
 // --- Types ---
 type StaticImageData = string
 
@@ -89,6 +96,7 @@ interface AnimatedStepImageProps {
   alt: string
   className?: string
   style?: React.CSSProperties
+  layoutId?: string
 }
 
 // --- Constants ---
@@ -102,8 +110,8 @@ const steps: readonly Step[] = [
     description:
       "Developed as a solution to the complexity of the AI ecosystem, LLMetric is a centralized platform that guides users to find the most suitable AI models and tools for their specific needs.",
     detailedDescription:
-      "LLMetric is a comprehensive AI Discovery & Comparison Platform designed to navigate the complex AI ecosystem. The platform provides personalized recommendations via an intelligent LLM assistant, enabling live model testing and comparison based on objective data. Built with a sophisticated multi-agent backend architecture for autonomous content generation.",
-    technologies: ["Python", "LangChain", "LangGraph", "Multi-Agent Systems", "LLM Integration", "Real-time Testing"],
+      "LLMetric is a comprehensive AI Discovery & Comparison Platform designed to navigate the complex AI ecosystem. The platform provides personalized recommendations via an intelligent LLM assistant, enabling live model testing and comparison based on objective data. Built with a sophisticated multi-agent backend architecture for autonomous content generation. Developed end-to-end as a solo project, from the Next.js frontend to the multi-agent backend and supporting infrastructure.",
+    technologies: ["Python", "LangChain", "LangGraph", "Next.js", "Multi-Agent Systems", "LLM Integration", "Real-time Testing"],
     achievements: [
       "Designed conversational 'AI Finder' LLM providing personalized recommendations for complex user needs",
       "Built 'Battle Arena' for live, side-by-side model testing against the same input",
@@ -301,7 +309,7 @@ function IconCheck({ className, ...props }: React.ComponentProps<"svg">) {
 }
 
 const stepVariants: Variants = {
-  inactive: { scale: 0.9, opacity: 0.7 },
+  inactive: { scale: 0.98, opacity: 0.75 },
   active: { scale: 1, opacity: 1 },
 }
 
@@ -327,25 +335,34 @@ const ANIMATION_PRESETS = {
     initial: { opacity: 0, scale: 0.9 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0.9 },
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
   },
   slideInLeft: {
-    initial: { opacity: 0, x: -100 },
+    initial: { opacity: 0, x: -60 },
     animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -100 },
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+    exit: { opacity: 0, x: -60 },
+    transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
   },
   slideInRight: {
-    initial: { opacity: 0, x: 100 },
+    initial: { opacity: 0, x: 60 },
     animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: 100 },
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+    exit: { opacity: 0, x: 60 },
+    transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
   },
 }
 
-const AnimatedStepImage = ({ preset = "fadeInScale", delay = 0, ...props }: AnimatedStepImageProps) => {
+const AnimatedStepImage = ({ preset = "fadeInScale", delay = 0, layoutId, className, ...props }: AnimatedStepImageProps) => {
   const presetConfig = ANIMATION_PRESETS[preset]
-  return <MotionStepImage {...props} {...presetConfig} transition={{ ...presetConfig.transition, delay }} />
+  return (
+    <MotionStepImage
+      {...props}
+      className={cn("transform-gpu", className)}
+      layout
+      layoutId={layoutId}
+      {...presetConfig}
+      transition={{ ...presetConfig.transition, delay, layout: { type: "spring", stiffness: 300, damping: 32, mass: 0.6 } }}
+    />
+  )
 }
 
 function FeatureCard({
@@ -374,34 +391,30 @@ function FeatureCard({
     <motion.div
       className="animated-cards group relative w-full rounded-2xl"
       onMouseMove={handleMouseMove}
+      onClick={onToggleExpanded}
       style={{ "--x": useMotionTemplate`${mouseX}px`, "--y": useMotionTemplate`${mouseY}px` } as WrapperStyle}
-      animate={{
-        height: isExpanded ? "auto" : "auto",
-      }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="relative w-full overflow-hidden rounded-3xl border border-neutral-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-neutral-900">
+      <div className="relative w-full overflow-hidden rounded-3xl border border-neutral-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-neutral-900 will-change-transform">
         <motion.div
-          className="m-10 w-full"
-          animate={{
-            minHeight: isExpanded ? "600px" : "450px",
-          }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="m-10 w-full transform-gpu"
+          layout
+          style={{ minHeight: isExpanded ? "600px" : "450px" }}
+          transition={{ type: "spring", stiffness: 240, damping: 34, mass: 0.7 }}
         >
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              className="flex w-full flex-col gap-4 md:w-3/5"
-              initial={{ opacity: 0, y: 20 }}
+              className="flex w-full flex-col gap-4 md:w-3/5 transform-gpu"
+              initial={{ opacity: 0.001, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             >
               <motion.div
                 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.05, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 0.05, duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               >
                 {steps[step].name}
               </motion.div>
@@ -409,15 +422,14 @@ function FeatureCard({
                 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 md:text-3xl cursor-pointer hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                onClick={onToggleExpanded}
+                transition={{ delay: 0.1, duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               >
                 {steps[step].title}
               </motion.h2>
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.15, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 0.15, duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               >
                 <p className="text-base leading-relaxed text-neutral-700 dark:text-neutral-400">
                   {isExpanded ? steps[step].detailedDescription : steps[step].description}
@@ -427,25 +439,15 @@ function FeatureCard({
               <AnimatePresence>
                 {isExpanded && (
                   <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className="space-y-6 overflow-hidden"
+                    initial={{ opacity: 0, scaleY: 0.96 }}
+                    animate={{ opacity: 1, scaleY: 1 }}
+                    exit={{ opacity: 0, scaleY: 0.96 }}
+                    transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+                    className="space-y-6 overflow-hidden transform-gpu"
+                    style={{ transformOrigin: "top" }}
+                    layout
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-3">
-                          Duration & Role
-                        </h4>
-                        <p className="text-sm text-neutral-700 dark:text-neutral-300 mb-2">
-                          <span className="font-medium">Duration:</span> {steps[step].duration}
-                        </p>
-                        <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                          <span className="font-medium">Role:</span> {steps[step].role}
-                        </p>
-                      </div>
-
+                    <div className="grid grid-cols-1 gap-6">
                       <div>
                         <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-3">
                           Technologies
@@ -532,7 +534,7 @@ function FeatureCard({
                         <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-4">
                           Development Interface
                         </h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <motion.img
                             src="/unity-interface.png"
                             alt="Unity Game Development Interface"
@@ -567,6 +569,17 @@ function FeatureCard({
                               e.currentTarget.style.transform = "scale(1)"
                             }}
                           />
+                          <motion.a
+                            href="/fethi-omur-environment-final-report.pdf"
+                            download
+                            className="w-full p-6 flex items-center justify-center rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 shadow-lg hover:shadow-xl transition-all cursor-pointer text-neutral-800 dark:text-neutral-200"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.35 }}
+                            title="Download: Fethi Omur Environment Final Report"
+                          >
+                            <span className="text-center text-sm">Download PDF<br/>Fethi Omur Environment Final Report</span>
+                          </motion.a>
                         </div>
                       </div>
                     )}
@@ -723,7 +736,7 @@ function FeatureCard({
                     )}
 
                     <motion.button
-                      onClick={onToggleExpanded}
+                      onClick={(e) => { e.stopPropagation(); onToggleExpanded() }}
                       className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 transition-colors"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -795,7 +808,7 @@ function StepsNav({
 }
 
 const defaultClasses = {
-  img: "rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-2xl shadow-black/10 dark:shadow-neutral-950/50",
+  img: "rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-2xl shadow-black/10 dark:shadow-neutral-950/50 transform-gpu will-change-transform",
   step1img1: "w-[45%] right-[54%] top-[5%]",
   step1img2: "w-[45%] right-[9%] top-[20%]",
   step2img1: "w-[50%] left-[5%] top-[20%]",
@@ -872,13 +885,15 @@ export function FeatureCarousel({
             <AnimatedStepImage
               alt="LLMetric Testimonials and Announcements"
               className={cn(defaultClasses.img, "w-[45%] right-[54%] top-[5%]")}
-              src="/llmetric-testimonials.png"
+              layoutId="step0-1"
+              src={withBase("/llmetric-testimonials.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="LLMetric Search Interface"
               className={cn(defaultClasses.img, "w-[45%] right-[9%] top-[20%]")}
-              src="/llmetric-interface.png"
+              layoutId="step0-2"
+              src={withBase("/llmetric-interface.png")}
               preset="slideInRight"
               delay={0.1}
             />
@@ -890,13 +905,15 @@ export function FeatureCarousel({
             <AnimatedStepImage
               alt={image.alt}
               className={cn(defaultClasses.img, step2img1Class)}
-              src={image.step2img1}
+              layoutId="step1-1"
+              src={withBase(image.step2img1 as string)}
               preset="fadeInScale"
             />
             <AnimatedStepImage
               alt={image.alt}
               className={cn(defaultClasses.img, step2img2Class)}
-              src={image.step2img2}
+              layoutId="step1-2"
+              src={withBase(image.step2img2 as string)}
               preset="fadeInScale"
               delay={0.1}
             />
@@ -908,13 +925,15 @@ export function FeatureCarousel({
             <AnimatedStepImage
               alt="F1 Scores Chart"
               className={cn(defaultClasses.img, "w-[45%] right-[54%] top-[5%]")}
-              src="/f1-scores-chart.png"
+              layoutId="step2-1"
+              src={withBase("/f1-scores-chart.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="Harbor Satellite Images"
               className={cn(defaultClasses.img, "w-[45%] right-[9%] top-[20%]")}
-              src="/harbor-satellite-images.png"
+              layoutId="step2-2"
+              src={withBase("/harbor-satellite-images.png")}
               preset="slideInRight"
               delay={0.1}
             />
@@ -926,20 +945,23 @@ export function FeatureCarousel({
             <AnimatedStepImage
               alt="Neurolanche Main Logo"
               className={cn(defaultClasses.img, "w-[25%] right-[70%] top-[5%]")}
-              src="/neurolanche.svg"
+              layoutId="step3-1"
+              src={withBase("/neurolanche.svg")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="Neurolanche Brand Variant"
               className={cn(defaultClasses.img, "w-[25%] right-[40%] top-[15%]")}
-              src="/neurolanche-4.svg"
+              layoutId="step3-2"
+              src={withBase("/neurolanche-4.svg")}
               preset="fadeInScale"
               delay={0.1}
             />
             <AnimatedStepImage
               alt="Neurolanche Logo Alternative"
               className={cn(defaultClasses.img, "w-[25%] right-[10%] top-[25%]")}
-              src="/neurolanche-1.svg"
+              layoutId="step3-3"
+              src={withBase("/neurolanche-1.svg")}
               preset="slideInRight"
               delay={0.2}
             />
@@ -951,13 +973,15 @@ export function FeatureCarousel({
             <AnimatedStepImage
               alt="Medical AI Diagnostic Interface"
               className={cn(defaultClasses.img, "w-[45%] right-[54%] top-[5%]")}
-              src="/medical-ai-diagnostic-interface.png"
+              layoutId="step4-1"
+              src={withBase("/medical-ai-diagnostic-interface.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="U-Net Segmentation Results"
               className={cn(defaultClasses.img, "w-[45%] right-[9%] top-[20%]")}
-              src="/u-net-tumor-segmentation.png"
+              layoutId="step4-2"
+              src={withBase("/u-net-tumor-segmentation.png")}
               preset="slideInRight"
               delay={0.1}
             />
@@ -969,13 +993,15 @@ export function FeatureCarousel({
             <AnimatedStepImage
               alt="Unity Game Development Interface"
               className={cn(defaultClasses.img, "w-[45%] right-[54%] top-[5%]")}
-              src="/unity-interface.png"
+              layoutId="step5-1"
+              src={withBase("/unity-interface.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="Mobile App Development Interface"
               className={cn(defaultClasses.img, "w-[45%] right-[9%] top-[20%]")}
-              src="/mobile-app-interface.png"
+              layoutId="step5-2"
+              src={withBase("/mobile-app-interface.png")}
               preset="slideInRight"
               delay={0.1}
             />
@@ -995,7 +1021,7 @@ export function FeatureCarousel({
       >
         <FeatureCard {...props} step={step} isExpanded={expandedStep === step} onToggleExpanded={handleToggleExpanded}>
           <AnimatePresence mode="wait">
-            <motion.div key={step} {...ANIMATION_PRESETS.fadeInScale} className="w-full h-full absolute">
+            <motion.div key={step} {...ANIMATION_PRESETS.fadeInScale} className="w-full h-full absolute" layout>
               {renderStepContent()}
             </motion.div>
           </AnimatePresence>

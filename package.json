@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "export": "GITHUB_PAGES=true next build",
+    "deploy": "touch .nojekyll && git add -A && git commit -m 'gh-pages export' || true && git push",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start"
