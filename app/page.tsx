@@ -249,11 +249,11 @@ export default function Home() {
                     <p className="text-muted-foreground leading-relaxed">{job.description}</p>
                   </div>
 
-                  <div className="col-span-12 sm:col-span-4 flex flex-wrap gap-2 sm:justify-end mt-2 sm:mt-0">
+                  <div className="col-span-12 sm:col-span-4 flex flex-wrap items-start gap-2 sm:justify-end mt-2 sm:mt-0">
                     {job.tech.map((tech) => (
                       <span
                         key={tech}
-                        className="px-2 py-1 text-xs text-muted-foreground rounded border border-border/40 group-hover:border-muted-foreground/50 transition-colors duration-500"
+                        className="inline-flex h-7 items-center rounded-md border border-border/40 bg-background/30 px-2 text-xs text-muted-foreground whitespace-nowrap leading-none group-hover:border-muted-foreground/50"
                       >
                         {tech}
                       </span>
