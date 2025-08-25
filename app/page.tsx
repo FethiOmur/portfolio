@@ -124,7 +124,7 @@ export default function Home() {
         <header
           id="intro"
           ref={(el) => { sectionsRef.current[0] = el }}
-          className="min-h-screen flex items-center opacity-0"
+          className="min-h-screen flex items-center"
         >
           <div className="grid lg:grid-cols-5 gap-16 w-full">
             <div className="lg:col-span-3 space-y-8">
@@ -182,7 +182,7 @@ export default function Home() {
           </div>
         </header>
 
-        <section id="work" ref={(el) => { sectionsRef.current[1] = el }} className="min-h-screen py-16 sm:py-24 lg:py-32 opacity-0">
+        <section id="work" ref={(el) => { sectionsRef.current[1] = el }} className="min-h-screen py-16 sm:py-24 lg:py-32">
           <div className="space-y-16">
             <div className="flex items-end justify-between">
               <h2 className="text-3xl sm:text-4xl font-light">Selected Work</h2>
@@ -265,7 +265,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="thoughts" ref={(el) => { sectionsRef.current[2] = el }} className="min-h-screen py-32 opacity-0">
+        <section id="thoughts" ref={(el) => { sectionsRef.current[2] = el }} className="min-h-screen py-32">
           <div className="space-y-16">
             <h2 className="text-4xl font-light">Projects</h2>
 
@@ -286,7 +286,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="connect" ref={(el) => { sectionsRef.current[3] = el }} className="py-32 opacity-0">
+        <section id="connect" ref={(el) => { sectionsRef.current[3] = el }} className="py-32">
           <div className="grid lg:grid-cols-2 gap-16">
             <div className="space-y-8">
               <h2 className="text-4xl font-light">Let's Connect</h2>
