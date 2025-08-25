@@ -29,6 +29,8 @@ export default function Home() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            entry.target.classList.remove("opacity-0")
+            entry.target.classList.add("opacity-100")
             entry.target.classList.add("animate-fade-in-up")
             setActiveSection(entry.target.id)
           }
@@ -146,9 +148,9 @@ export default function Home() {
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    Available for work
+                    Available for work anywhere in the EU
                   </div>
-                  <div>Turin & Milan, Italy</div>
+                  <div>Torino & Milano, Italy</div>
                 </div>
               </div>
             </div>
@@ -180,14 +182,14 @@ export default function Home() {
           </div>
         </header>
 
-        <section id="work" ref={(el) => { sectionsRef.current[1] = el }} className="min-h-screen py-32 opacity-0">
+        <section id="work" ref={(el) => { sectionsRef.current[1] = el }} className="min-h-screen py-16 sm:py-24 lg:py-32 opacity-0">
           <div className="space-y-16">
             <div className="flex items-end justify-between">
-              <h2 className="text-4xl font-light">Selected Work</h2>
-              <div className="text-sm text-muted-foreground font-mono">2020 — 2025</div>
+              <h2 className="text-3xl sm:text-4xl font-light">Selected Work</h2>
+              <div className="hidden sm:block text-sm text-muted-foreground font-mono">2020 — 2025</div>
             </div>
 
-            <div className="space-y-12">
+            <div className="space-y-8 sm:space-y-12">
               {[
                 {
                   year: "2025",
@@ -231,27 +233,27 @@ export default function Home() {
               ].map((job, index) => (
                 <div
                   key={index}
-                  className="group grid lg:grid-cols-12 gap-8 py-8 border-b border-border/50 hover:border-border transition-colors duration-500"
+                  className="group grid grid-cols-12 gap-4 sm:gap-6 lg:gap-8 py-6 sm:py-8 border-b border-border/50 hover:border-border transition-colors duration-500"
                 >
-                  <div className="lg:col-span-2">
-                    <div className="text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
+                  <div className="col-span-3 sm:col-span-2">
+                    <div className="text-xl sm:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
                       {job.year}
                     </div>
                   </div>
 
-                  <div className="lg:col-span-6 space-y-3">
+                  <div className="col-span-9 sm:col-span-6 space-y-2 sm:space-y-3">
                     <div>
-                      <h3 className="text-xl font-medium">{job.role}</h3>
+                      <h3 className="text-lg sm:text-xl font-medium">{job.role}</h3>
                       <div className="text-muted-foreground">{job.company}</div>
                     </div>
-                    <p className="text-muted-foreground leading-relaxed max-w-lg">{job.description}</p>
+                    <p className="text-muted-foreground leading-relaxed">{job.description}</p>
                   </div>
 
-                  <div className="lg:col-span-4 flex flex-wrap gap-2 lg:justify-end">
+                  <div className="col-span-12 sm:col-span-4 flex flex-wrap gap-2 sm:justify-end mt-2 sm:mt-0">
                     {job.tech.map((tech) => (
                       <span
                         key={tech}
-                        className="px-2 py-1 text-xs text-muted-foreground rounded group-hover:border-muted-foreground/50 transition-colors duration-500"
+                        className="px-2 py-1 text-xs text-muted-foreground rounded border border-border/40 group-hover:border-muted-foreground/50 transition-colors duration-500"
                       >
                         {tech}
                       </span>

@@ -4,18 +4,18 @@
 import { useEffect, useRef } from "react";
 
 function SplashCursor({
-  SIM_RESOLUTION = 128,
-  DYE_RESOLUTION = 1440,
-  CAPTURE_RESOLUTION = 512,
+  SIM_RESOLUTION = 96,
+  DYE_RESOLUTION = 768,
+  CAPTURE_RESOLUTION = 384,
   DENSITY_DISSIPATION = 3.5,
   VELOCITY_DISSIPATION = 2,
   PRESSURE = 0.1,
-  PRESSURE_ITERATIONS = 20,
-  CURL = 3,
+  PRESSURE_ITERATIONS = 12,
+  CURL = 2,
   SPLAT_RADIUS = 0.2,
-  SPLAT_FORCE = 6000,
+  SPLAT_FORCE = 4000,
   SHADING = true,
-  COLOR_UPDATE_SPEED = 10,
+  COLOR_UPDATE_SPEED = 8,
   BACK_COLOR = { r: 0.5, g: 0, b: 0 },
   TRANSPARENT = true,
 }) {
@@ -812,56 +812,37 @@ function SplashCursor({
 
     updateKeywords();
     initFramebuffers();
-    let lastUpdateTime = Date.now();
+    const TARGET_FPS = 45;
+    const FRAME_INTERVAL = 1000 / TARGET_FPS;
+    let lastUpdateTime = performance.now();
+    let lastRenderTime = 0;
     let colorUpdateTimer = 0.0;
+    let isPaused = false;
 
     let rafId = 0
-    let isRunning = false
-    const targetFpsRef = { current: 60 }
-    const lastFrameTimeRef = { current: 0 }
-    const lastInteractionRef = { current: Date.now() }
 
-    function updateFrame() {
-      if (!isRunning) return
-      const now = performance.now()
-      const minFrameInterval = 1000 / targetFpsRef.current
-      if (now - lastFrameTimeRef.current < minFrameInterval) {
-        rafId = requestAnimationFrame(updateFrame)
-        return
+    function updateFrame(now = performance.now()) {
+      if (isPaused) {
+        rafId = requestAnimationFrame(updateFrame);
+        return;
       }
-      lastFrameTimeRef.current = now
-
-      const dt = calcDeltaTime();
+      if (now - lastRenderTime < FRAME_INTERVAL) {
+        rafId = requestAnimationFrame(updateFrame);
+        return;
+      }
+      const dt = calcDeltaTime(now);
       if (resizeCanvas()) initFramebuffers();
       updateColors(dt);
       applyInputs();
       step(dt);
       render(null);
-
-      // Etkileşim yoksa FPS'i düşür (mobilde daha agresif)
-      const idleMs = Date.now() - lastInteractionRef.current
-      const idleThreshold = 15000
-      const isMobile = /Mobi|Android/i.test(navigator.userAgent)
-      targetFpsRef.current = idleMs > idleThreshold ? (isMobile ? 24 : 30) : (isMobile ? 30 : 60)
-
+      lastRenderTime = now;
       rafId = requestAnimationFrame(updateFrame);
     }
 
-    function startLoop() {
-      if (isRunning) return
-      isRunning = true
-      rafId = requestAnimationFrame(updateFrame)
-    }
-
-    function stopLoop() {
-      isRunning = false
-      if (rafId) cancelAnimationFrame(rafId)
-    }
-
-    function calcDeltaTime() {
-      let now = Date.now();
+    function calcDeltaTime(now: number) {
       let dt = (now - lastUpdateTime) / 1000;
-      dt = Math.min(dt, 0.016666);
+      dt = Math.min(dt, 0.0333);
       lastUpdateTime = now;
       return dt;
     }
@@ -1218,9 +1199,8 @@ function SplashCursor({
       let posY = scaleByPixelRatio(e.clientY);
       updatePointerDownData(pointer, -1, posX, posY);
       clickSplat(pointer);
-      lastInteractionRef.current = Date.now()
     }
-    window.addEventListener("mousedown", onMouseDown);
+    window.addEventListener("mousedown", onMouseDown, { passive: true } as any);
 
     function handleFirstMouseMove(e: MouseEvent) {
       let pointer = pointers[0];
@@ -1229,9 +1209,8 @@ function SplashCursor({
       let color = generateColor();
       updatePointerMoveData(pointer, posX, posY, color);
       document.body.removeEventListener("mousemove", handleFirstMouseMove);
-      lastInteractionRef.current = Date.now()
     }
-    document.body.addEventListener("mousemove", handleFirstMouseMove);
+    document.body.addEventListener("mousemove", handleFirstMouseMove, { passive: true } as any);
 
     const onMouseMove = (e: MouseEvent) => {
       let pointer = pointers[0];
@@ -1239,9 +1218,8 @@ function SplashCursor({
       let posY = scaleByPixelRatio(e.clientY);
       let color = pointer.color;
       updatePointerMoveData(pointer, posX, posY, color);
-      lastInteractionRef.current = Date.now()
     }
-    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mousemove", onMouseMove, { passive: true } as any);
 
     function handleFirstTouchStart(e: TouchEvent) {
       const touches = e.targetTouches;
@@ -1252,9 +1230,8 @@ function SplashCursor({
         updatePointerDownData(pointer, touches[i].identifier, posX, posY);
       }
       document.body.removeEventListener("touchstart", handleFirstTouchStart);
-      lastInteractionRef.current = Date.now()
     }
-    document.body.addEventListener("touchstart", handleFirstTouchStart);
+    document.body.addEventListener("touchstart", handleFirstTouchStart, { passive: true } as any);
 
     const onTouchStart = (e: TouchEvent) => {
       const touches = e.targetTouches;
@@ -1264,9 +1241,8 @@ function SplashCursor({
         let posY = scaleByPixelRatio(touches[i].clientY);
         updatePointerDownData(pointer, touches[i].identifier, posX, posY);
       }
-      lastInteractionRef.current = Date.now()
     }
-    window.addEventListener("touchstart", onTouchStart);
+    window.addEventListener("touchstart", onTouchStart, { passive: true } as any);
 
     const onTouchMove = (e: TouchEvent) => {
       const touches = e.targetTouches;
@@ -1276,9 +1252,8 @@ function SplashCursor({
         let posY = scaleByPixelRatio(touches[i].clientY);
         updatePointerMoveData(pointer, posX, posY, pointer.color);
       }
-      lastInteractionRef.current = Date.now()
     }
-    window.addEventListener("touchmove", onTouchMove, false);
+    window.addEventListener("touchmove", onTouchMove, { passive: true } as any);
 
     const onTouchEnd = (e: TouchEvent) => {
       const touches = e.changedTouches;
@@ -1287,31 +1262,19 @@ function SplashCursor({
         updatePointerUpData(pointer);
       }
     }
-    window.addEventListener("touchend", onTouchEnd);
+    window.addEventListener("touchend", onTouchEnd, { passive: true } as any);
 
-    // Sekme görünürlüğüne ve pencere odağına göre döngüyü yönet
-    const onVisibility = () => (document.hidden ? stopLoop() : startLoop())
-    const onBlur = () => stopLoop()
-    const onFocus = () => startLoop()
-    document.addEventListener("visibilitychange", onVisibility)
-    window.addEventListener("blur", onBlur)
-    window.addEventListener("focus", onFocus)
-
-    startLoop();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    return () => {
-      stopLoop()
-      window.removeEventListener("mousedown", onMouseDown)
-      window.removeEventListener("mousemove", onMouseMove)
-      document.body.removeEventListener("mousemove", handleFirstMouseMove)
-      document.body.removeEventListener("touchstart", handleFirstTouchStart)
-      window.removeEventListener("touchstart", onTouchStart)
-      window.removeEventListener("touchmove", onTouchMove, false)
-      window.removeEventListener("touchend", onTouchEnd)
-      document.removeEventListener("visibilitychange", onVisibility)
-      window.removeEventListener("blur", onBlur)
-      window.removeEventListener("focus", onFocus)
+    const onVisibility = () => {
+      isPaused = document.visibilityState !== "visible";
+      if (!isPaused) {
+        lastUpdateTime = performance.now();
+        lastRenderTime = 0;
+      }
     }
+    document.addEventListener("visibilitychange", onVisibility);
+
+    updateFrame();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     SIM_RESOLUTION,
     DYE_RESOLUTION,
@@ -1329,10 +1292,20 @@ function SplashCursor({
     TRANSPARENT,
   ]);
 
-  // Cleanup on unmount to avoid multiple RAF loops and listeners
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      // Nothing here; listeners are removed in the previous effect's cleanup where applicable.
+      try {
+        cancelAnimationFrame((window as any).rafId);
+      } catch {}
+      window.removeEventListener("mousedown", (null as any));
+      window.removeEventListener("mousemove", (null as any));
+      window.removeEventListener("touchstart", (null as any));
+      window.removeEventListener("touchmove", (null as any));
+      window.removeEventListener("touchend", (null as any));
+      document.body.removeEventListener("mousemove", (null as any));
+      document.body.removeEventListener("touchstart", (null as any));
+      document.removeEventListener("visibilitychange", (null as any));
     }
   }, [])
 
