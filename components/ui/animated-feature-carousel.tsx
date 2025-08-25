@@ -396,15 +396,15 @@ function FeatureCard({
     >
       <div className="relative w-full overflow-hidden rounded-3xl border border-neutral-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-neutral-900 will-change-transform">
         <motion.div
-          className="w-full transform-gpu px-4 py-6 sm:m-10"
+          className="m-10 w-full transform-gpu"
           layout
-          style={{ minHeight: isExpanded ? (isMobile ? "520px" : "600px") : (isMobile ? "380px" : "450px") }}
+          style={{ minHeight: isExpanded ? "600px" : "450px" }}
           transition={{ type: "spring", stiffness: 240, damping: 34, mass: 0.7 }}
         >
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              className="flex w-full flex-col gap-4 md:w-3/5 transform-gpu relative z-10"
+              className="flex w-full flex-col gap-4 md:w-3/5 transform-gpu"
               initial={{ opacity: 0.001, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
@@ -419,7 +419,7 @@ function FeatureCard({
                 {steps[step].name}
               </motion.div>
               <motion.h2
-                className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 cursor-pointer hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
+                className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 md:text-3xl cursor-pointer hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1, duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
@@ -431,7 +431,7 @@ function FeatureCard({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.15, duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               >
-                <p className="text-sm sm:text-base leading-relaxed text-neutral-700 dark:text-neutral-400">
+                <p className="text-base leading-relaxed text-neutral-700 dark:text-neutral-400">
                   {isExpanded ? steps[step].detailedDescription : steps[step].description}
                 </p>
               </motion.div>
@@ -490,7 +490,7 @@ function FeatureCard({
                         <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-4">
                           Platform Interface
                         </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <motion.img
                             src={withBase("/llmetric-testimonials.png")}
                             alt="LLMetric Testimonials and Announcements"
@@ -534,7 +534,7 @@ function FeatureCard({
                         <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-4">
                           Development Interface
                         </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <motion.img
                             src={withBase("/unity-interface.png")}
                             alt="Unity Game Development Interface"
@@ -593,7 +593,7 @@ function FeatureCard({
                           <motion.img
                             src={withBase("/neurolanche.svg")}
                             alt="Neurolanche Main Logo"
-                            className="w-2/3 sm:w-3/4 mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
+                            className="w-3/4 mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
@@ -610,7 +610,7 @@ function FeatureCard({
                           <motion.img
                             src={withBase("/neurolanche-4.svg")}
                             alt="Neurolanche Brand Variant"
-                            className="w-2/3 sm:w-3/4 mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
+                            className="w-3/4 mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
@@ -627,7 +627,7 @@ function FeatureCard({
                           <motion.img
                             src={withBase("/neurolanche-1.svg")}
                             alt="Neurolanche Logo Alternative"
-                            className="w-2/3 sm:w-3/4 mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
+                            className="w-3/4 mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 }}
@@ -650,7 +650,7 @@ function FeatureCard({
                         <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-4">
                           Medical AI Interface
                         </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <motion.img
                             src={withBase("/medical-ai-diagnostic-interface.png")}
                             alt="Medical AI Diagnostic Interface"
@@ -694,7 +694,7 @@ function FeatureCard({
                         <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-4">
                           Gaming Images
                         </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <motion.img
                             src={withBase("/unity-interface.png")}
                             alt="Unity Game Development Interface"
@@ -879,9 +879,10 @@ export function FeatureCarousel({
   }, [handleOutsideClick])
 
   const renderStepContent = () => {
+    if (isMobile) return null
     switch (step) {
       case 0:
-        return isMobile ? null : (
+        return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="LLMetric Testimonials and Announcements"
@@ -901,7 +902,7 @@ export function FeatureCarousel({
           </div>
         )
       case 1:
-        return isMobile ? null : (
+        return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt={image.alt}
@@ -921,7 +922,7 @@ export function FeatureCarousel({
           </div>
         )
       case 2:
-        return isMobile ? null : (
+        return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="F1 Scores Chart"
@@ -941,7 +942,7 @@ export function FeatureCarousel({
           </div>
         )
       case 3:
-        return isMobile ? null : (
+        return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Neurolanche Main Logo"
@@ -969,7 +970,7 @@ export function FeatureCarousel({
           </div>
         )
       case 4:
-        return isMobile ? null : (
+        return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Medical AI Diagnostic Interface"
@@ -989,7 +990,7 @@ export function FeatureCarousel({
           </div>
         )
       case 5:
-        return isMobile ? null : (
+        return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Unity Game Development Interface"
@@ -1022,7 +1023,7 @@ export function FeatureCarousel({
       >
         <FeatureCard {...props} step={step} isExpanded={expandedStep === step} onToggleExpanded={handleToggleExpanded}>
           <AnimatePresence mode="wait">
-            <motion.div key={step} {...ANIMATION_PRESETS.fadeInScale} className="w-full h-full absolute inset-0 z-0 pointer-events-none" layout>
+            <motion.div key={step} {...ANIMATION_PRESETS.fadeInScale} className="w-full h-full absolute" layout>
               {renderStepContent()}
             </motion.div>
           </AnimatePresence>
