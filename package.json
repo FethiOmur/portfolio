@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "export": "GITHUB_PAGES=true next build",
-    "deploy": "touch .nojekyll && git add -A && git commit -m 'gh-pages export' || true && git push",
+    "export": "GITHUB_PAGES=true BASE_PATH=/portfolio next build && next export -o out && rm -rf docs && mkdir -p docs && cp -R out/* docs/ && touch docs/.nojekyll",
+    "deploy": "npm run export && git add -A && git commit -m 'gh-pages export' || true && git push",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start"

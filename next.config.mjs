@@ -5,6 +5,9 @@ const basePath = process.env.BASE_PATH || ''
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },

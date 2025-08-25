@@ -319,7 +319,7 @@ const StepImage = forwardRef<HTMLImageElement, StepImageProps>(({ src, alt, clas
       ref={ref}
       alt={alt}
       className={className}
-      src={src || "/placeholder.svg"}
+      src={src || withBase("/placeholder.svg")}
       style={{ position: "absolute", userSelect: "none", maxWidth: "unset", ...style }}
       onError={(e) => (e.currentTarget.src = placeholderImage(alt))}
       {...props}
@@ -492,7 +492,7 @@ function FeatureCard({
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <motion.img
-                            src="/llmetric-testimonials.png"
+                            src={withBase("/llmetric-testimonials.png")}
                             alt="LLMetric Testimonials and Announcements"
                             className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
@@ -509,7 +509,7 @@ function FeatureCard({
                             }}
                           />
                           <motion.img
-                            src="/llmetric-interface.png"
+                            src={withBase("/llmetric-interface.png")}
                             alt="LLMetric Search Interface"
                             className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
@@ -536,7 +536,7 @@ function FeatureCard({
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <motion.img
-                            src="/unity-interface.png"
+                            src={withBase("/unity-interface.png")}
                             alt="Unity Game Development Interface"
                             className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
@@ -553,7 +553,7 @@ function FeatureCard({
                             }}
                           />
                           <motion.img
-                            src="/mobile-app-interface.png"
+                            src={withBase("/mobile-app-interface.png")}
                             alt="Mobile App Development Interface"
                             className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
@@ -570,7 +570,7 @@ function FeatureCard({
                             }}
                           />
                           <motion.a
-                            href="/fethi-omur-environment-final-report.pdf"
+                            href={withBase("/fethi-omur-environment-final-report.pdf")}
                             download
                             className="w-full p-6 flex items-center justify-center rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 shadow-lg hover:shadow-xl transition-all cursor-pointer text-neutral-800 dark:text-neutral-200"
                             initial={{ opacity: 0, y: 20 }}
@@ -591,7 +591,7 @@ function FeatureCard({
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <motion.img
-                            src="/neurolanche.svg"
+                            src={withBase("/neurolanche.svg")}
                             alt="Neurolanche Main Logo"
                             className="w-3/4 mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
@@ -608,7 +608,7 @@ function FeatureCard({
                             }}
                           />
                           <motion.img
-                            src="/neurolanche-4.svg"
+                            src={withBase("/neurolanche-4.svg")}
                             alt="Neurolanche Brand Variant"
                             className="w-3/4 mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
@@ -625,7 +625,7 @@ function FeatureCard({
                             }}
                           />
                           <motion.img
-                            src="/neurolanche-1.svg"
+                            src={withBase("/neurolanche-1.svg")}
                             alt="Neurolanche Logo Alternative"
                             className="w-3/4 mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
@@ -652,7 +652,7 @@ function FeatureCard({
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <motion.img
-                            src="/medical-ai-diagnostic-interface.png"
+                            src={withBase("/medical-ai-diagnostic-interface.png")}
                             alt="Medical AI Diagnostic Interface"
                             className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
@@ -669,7 +669,7 @@ function FeatureCard({
                             }}
                           />
                           <motion.img
-                            src="/u-net-tumor-segmentation.png"
+                            src={withBase("/u-net-tumor-segmentation.png")}
                             alt="U-Net Segmentation Results"
                             className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
@@ -696,7 +696,7 @@ function FeatureCard({
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <motion.img
-                            src="/unity-interface.png"
+                            src={withBase("/unity-interface.png")}
                             alt="Unity Game Development Interface"
                             className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
@@ -714,7 +714,7 @@ function FeatureCard({
                             }}
                           />
                           <motion.img
-                            src="/mobile-app-interface.png"
+                            src={withBase("/mobile-app-interface.png")}
                             alt="Mobile App Development Interface"
                             className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg cursor-pointer hover:opacity-80 transition-opacity"
                             initial={{ opacity: 0, y: 20 }}
