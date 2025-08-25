@@ -838,6 +838,7 @@ export function FeatureCarousel({
   const [expandedStep, setExpandedStep] = useState<number | null>(null)
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null)
   const carouselRef = useRef<HTMLDivElement>(null)
+  const isMobile = useIsMobile()
 
   const handleToggleExpanded = useCallback(() => {
     setExpandedStep(expandedStep === step ? null : step)
@@ -880,7 +881,27 @@ export function FeatureCarousel({
   const renderStepContent = () => {
     switch (step) {
       case 0:
-        return (
+        return isMobile ? (
+          <div className="relative w-full h-auto space-y-3">
+            <AnimatedStepImage
+              alt="LLMetric Testimonials and Announcements"
+              className={cn(defaultClasses.img, "relative w-full static")}
+              layoutId="step0-1"
+              src={withBase("/llmetric-testimonials.png")}
+              preset="fadeInScale"
+              style={{ position: "relative" }}
+            />
+            <AnimatedStepImage
+              alt="LLMetric Search Interface"
+              className={cn(defaultClasses.img, "relative w-full static")}
+              layoutId="step0-2"
+              src={withBase("/llmetric-interface.png")}
+              preset="fadeInScale"
+              delay={0.05}
+              style={{ position: "relative" }}
+            />
+          </div>
+        ) : (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="LLMetric Testimonials and Announcements"
@@ -900,7 +921,27 @@ export function FeatureCarousel({
           </div>
         )
       case 1:
-        return (
+        return isMobile ? (
+          <div className="relative w-full h-auto space-y-3">
+            <AnimatedStepImage
+              alt={image.alt}
+              className={cn(defaultClasses.img, "relative w-full static")}
+              layoutId="step1-1"
+              src={withBase(image.step2img1 as string)}
+              preset="fadeInScale"
+              style={{ position: "relative" }}
+            />
+            <AnimatedStepImage
+              alt={image.alt}
+              className={cn(defaultClasses.img, "relative w-full static")}
+              layoutId="step1-2"
+              src={withBase(image.step2img2 as string)}
+              preset="fadeInScale"
+              delay={0.05}
+              style={{ position: "relative" }}
+            />
+          </div>
+        ) : (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt={image.alt}
@@ -920,7 +961,27 @@ export function FeatureCarousel({
           </div>
         )
       case 2:
-        return (
+        return isMobile ? (
+          <div className="relative w-full h-auto space-y-3">
+            <AnimatedStepImage
+              alt="F1 Scores Chart"
+              className={cn(defaultClasses.img, "relative w-full static")}
+              layoutId="step2-1"
+              src={withBase("/f1-scores-chart.png")}
+              preset="fadeInScale"
+              style={{ position: "relative" }}
+            />
+            <AnimatedStepImage
+              alt="Harbor Satellite Images"
+              className={cn(defaultClasses.img, "relative w-full static")}
+              layoutId="step2-2"
+              src={withBase("/harbor-satellite-images.png")}
+              preset="fadeInScale"
+              delay={0.05}
+              style={{ position: "relative" }}
+            />
+          </div>
+        ) : (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="F1 Scores Chart"
@@ -940,7 +1001,16 @@ export function FeatureCarousel({
           </div>
         )
       case 3:
-        return (
+        return isMobile ? (
+          <div className="relative w-full h-auto grid grid-cols-1 gap-3">
+            <AnimatedStepImage alt="Neurolanche Main Logo" className={cn(defaultClasses.img, "relative w-2/3 mx-auto static")}
+              layoutId="step3-1" src={withBase("/neurolanche.svg")} preset="fadeInScale" style={{ position: "relative" }} />
+            <AnimatedStepImage alt="Neurolanche Brand Variant" className={cn(defaultClasses.img, "relative w-2/3 mx-auto static")}
+              layoutId="step3-2" src={withBase("/neurolanche-4.svg")} preset="fadeInScale" delay={0.05} style={{ position: "relative" }} />
+            <AnimatedStepImage alt="Neurolanche Logo Alternative" className={cn(defaultClasses.img, "relative w-2/3 mx-auto static")}
+              layoutId="step3-3" src={withBase("/neurolanche-1.svg")} preset="fadeInScale" delay={0.1} style={{ position: "relative" }} />
+          </div>
+        ) : (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Neurolanche Main Logo"
@@ -968,7 +1038,14 @@ export function FeatureCarousel({
           </div>
         )
       case 4:
-        return (
+        return isMobile ? (
+          <div className="relative w-full h-auto space-y-3">
+            <AnimatedStepImage alt="Medical AI Diagnostic Interface" className={cn(defaultClasses.img, "relative w-full static")}
+              layoutId="step4-1" src={withBase("/medical-ai-diagnostic-interface.png")} preset="fadeInScale" style={{ position: "relative" }} />
+            <AnimatedStepImage alt="U-Net Segmentation Results" className={cn(defaultClasses.img, "relative w-full static")}
+              layoutId="step4-2" src={withBase("/u-net-tumor-segmentation.png")} preset="fadeInScale" delay={0.05} style={{ position: "relative" }} />
+          </div>
+        ) : (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Medical AI Diagnostic Interface"
@@ -988,7 +1065,14 @@ export function FeatureCarousel({
           </div>
         )
       case 5:
-        return (
+        return isMobile ? (
+          <div className="relative w-full h-auto space-y-3">
+            <AnimatedStepImage alt="Unity Game Development Interface" className={cn(defaultClasses.img, "relative w-full static")}
+              layoutId="step5-1" src={withBase("/unity-interface.png")} preset="fadeInScale" style={{ position: "relative" }} />
+            <AnimatedStepImage alt="Mobile App Development Interface" className={cn(defaultClasses.img, "relative w-full static")}
+              layoutId="step5-2" src={withBase("/mobile-app-interface.png")} preset="fadeInScale" delay={0.05} style={{ position: "relative" }} />
+          </div>
+        ) : (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Unity Game Development Interface"
