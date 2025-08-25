@@ -816,15 +816,46 @@ function SplashCursor({
     let colorUpdateTimer = 0.0;
 
     let rafId = 0
+    let isRunning = false
+    const targetFpsRef = { current: 60 }
+    const lastFrameTimeRef = { current: 0 }
+    const lastInteractionRef = { current: Date.now() }
 
     function updateFrame() {
+      if (!isRunning) return
+      const now = performance.now()
+      const minFrameInterval = 1000 / targetFpsRef.current
+      if (now - lastFrameTimeRef.current < minFrameInterval) {
+        rafId = requestAnimationFrame(updateFrame)
+        return
+      }
+      lastFrameTimeRef.current = now
+
       const dt = calcDeltaTime();
       if (resizeCanvas()) initFramebuffers();
       updateColors(dt);
       applyInputs();
       step(dt);
       render(null);
+
+      // Etkileşim yoksa FPS'i düşür (mobilde daha agresif)
+      const idleMs = Date.now() - lastInteractionRef.current
+      const idleThreshold = 15000
+      const isMobile = /Mobi|Android/i.test(navigator.userAgent)
+      targetFpsRef.current = idleMs > idleThreshold ? (isMobile ? 24 : 30) : (isMobile ? 30 : 60)
+
       rafId = requestAnimationFrame(updateFrame);
+    }
+
+    function startLoop() {
+      if (isRunning) return
+      isRunning = true
+      rafId = requestAnimationFrame(updateFrame)
+    }
+
+    function stopLoop() {
+      isRunning = false
+      if (rafId) cancelAnimationFrame(rafId)
     }
 
     function calcDeltaTime() {
@@ -1187,6 +1218,7 @@ function SplashCursor({
       let posY = scaleByPixelRatio(e.clientY);
       updatePointerDownData(pointer, -1, posX, posY);
       clickSplat(pointer);
+      lastInteractionRef.current = Date.now()
     }
     window.addEventListener("mousedown", onMouseDown);
 
@@ -1197,6 +1229,7 @@ function SplashCursor({
       let color = generateColor();
       updatePointerMoveData(pointer, posX, posY, color);
       document.body.removeEventListener("mousemove", handleFirstMouseMove);
+      lastInteractionRef.current = Date.now()
     }
     document.body.addEventListener("mousemove", handleFirstMouseMove);
 
@@ -1206,6 +1239,7 @@ function SplashCursor({
       let posY = scaleByPixelRatio(e.clientY);
       let color = pointer.color;
       updatePointerMoveData(pointer, posX, posY, color);
+      lastInteractionRef.current = Date.now()
     }
     window.addEventListener("mousemove", onMouseMove);
 
@@ -1218,6 +1252,7 @@ function SplashCursor({
         updatePointerDownData(pointer, touches[i].identifier, posX, posY);
       }
       document.body.removeEventListener("touchstart", handleFirstTouchStart);
+      lastInteractionRef.current = Date.now()
     }
     document.body.addEventListener("touchstart", handleFirstTouchStart);
 
@@ -1229,6 +1264,7 @@ function SplashCursor({
         let posY = scaleByPixelRatio(touches[i].clientY);
         updatePointerDownData(pointer, touches[i].identifier, posX, posY);
       }
+      lastInteractionRef.current = Date.now()
     }
     window.addEventListener("touchstart", onTouchStart);
 
@@ -1240,6 +1276,7 @@ function SplashCursor({
         let posY = scaleByPixelRatio(touches[i].clientY);
         updatePointerMoveData(pointer, posX, posY, pointer.color);
       }
+      lastInteractionRef.current = Date.now()
     }
     window.addEventListener("touchmove", onTouchMove, false);
 
@@ -1252,8 +1289,29 @@ function SplashCursor({
     }
     window.addEventListener("touchend", onTouchEnd);
 
-    updateFrame();
+    // Sekme görünürlüğüne ve pencere odağına göre döngüyü yönet
+    const onVisibility = () => (document.hidden ? stopLoop() : startLoop())
+    const onBlur = () => stopLoop()
+    const onFocus = () => startLoop()
+    document.addEventListener("visibilitychange", onVisibility)
+    window.addEventListener("blur", onBlur)
+    window.addEventListener("focus", onFocus)
+
+    startLoop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      stopLoop()
+      window.removeEventListener("mousedown", onMouseDown)
+      window.removeEventListener("mousemove", onMouseMove)
+      document.body.removeEventListener("mousemove", handleFirstMouseMove)
+      document.body.removeEventListener("touchstart", handleFirstTouchStart)
+      window.removeEventListener("touchstart", onTouchStart)
+      window.removeEventListener("touchmove", onTouchMove, false)
+      window.removeEventListener("touchend", onTouchEnd)
+      document.removeEventListener("visibilitychange", onVisibility)
+      window.removeEventListener("blur", onBlur)
+      window.removeEventListener("focus", onFocus)
+    }
   }, [
     SIM_RESOLUTION,
     DYE_RESOLUTION,
