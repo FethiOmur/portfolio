@@ -97,6 +97,7 @@ interface AnimatedStepImageProps {
   className?: string
   style?: React.CSSProperties
   layoutId?: string
+  layoutEnabled?: boolean
 }
 
 // --- Constants ---
@@ -351,14 +352,14 @@ const ANIMATION_PRESETS = {
   },
 }
 
-const AnimatedStepImage = ({ preset = "fadeInScale", delay = 0, layoutId, className, ...props }: AnimatedStepImageProps) => {
+const AnimatedStepImage = ({ preset = "fadeInScale", delay = 0, layoutId, className, layoutEnabled = false, ...props }: AnimatedStepImageProps) => {
   const presetConfig = ANIMATION_PRESETS[preset] as any
   return (
     <MotionStepImage
       {...props}
       className={cn("transform-gpu", className)}
-      layout
-      layoutId={layoutId}
+      {...(layoutEnabled ? { layout: true } : {})}
+      {...(layoutEnabled && layoutId ? { layoutId } : {})}
       initial={presetConfig.initial}
       animate={presetConfig.animate}
       exit={presetConfig.exit}
@@ -400,7 +401,7 @@ function FeatureCard({
         <motion.div
           className="w-full transform-gpu m-6 sm:m-8 md:m-10"
           layout
-          style={{ minHeight: isExpanded ? "600px" : "450px" }}
+          style={{ minHeight: isMobile ? "auto" : isExpanded ? "600px" : "450px" }}
           transition={{ type: "spring", stiffness: 240, damping: 34, mass: 0.7 }}
         >
           <AnimatePresence mode="wait">
@@ -882,41 +883,48 @@ export function FeatureCarousel({
 
   const renderStepContent = () => {
     if (isMobile) return null
+    const expanded = expandedStep === step
+    // Kart genişletildiğinde üstteki overlay görselleri gizle
+    if (expanded) return null
     switch (step) {
       case 0:
         return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
-              alt="LLMetric Testimonials and Announcements"
-              className={cn(defaultClasses.img, "w-[40%] left-[58%] top-[8%]")}
+              alt="LLMetric Search Interface"
+              className={cn(defaultClasses.img, "w-[50%] right-[54%]")}
+              style={{ top: "calc(33% + 115px)", right: "calc(54% - 28px)" }}
               layoutId="step0-1"
-              src={withBase("/llmetric-testimonials.png")}
+              src={withBase("/llmetric-interface.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
-              alt="LLMetric Search Interface"
-              className={cn(defaultClasses.img, "w-[40%] left-[58%] top-[42%]")}
+              alt="LLMetric Testimonials and Announcements"
+              className={cn(defaultClasses.img, "w-[42%] right-[9%]")}
+              style={{ top: "calc(48% + 80px)", right: "calc(8% - 10px)" }}
               layoutId="step0-2"
-              src={withBase("/llmetric-interface.png")}
+              src={withBase("/llmetric-testimonials.png")}
               preset="slideInRight"
               delay={0.1}
             />
           </div>
         )
       case 1:
-        // Parking kartı: görseller geri getirildi, metnin sağında hizalandı
+        // Parking kartı: önceki düzen korunur, sadece dikeyde aşağı kaydırılır
         return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Smart Parking IoT"
-              className={cn(defaultClasses.img, "w-[42%] left-[58%] top-[10%]")}
+              className={cn(defaultClasses.img, "w-[50%] right-[54%]")}
+              style={{ top: "calc(33% + 115px)", right: "calc(54% - 28px)" }}
               layoutId="step1-1"
               src={withBase("/smart-parking-iot.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="Mobile App Interface"
-              className={cn(defaultClasses.img, "w-[38%] left-[60%] top-[48%]")}
+              className={cn(defaultClasses.img, "w-[42%] right-[9%]")}
+              style={{ top: "calc(48% + 80px)", right: "calc(8% - 10px)" }}
               layoutId="step1-2"
               src={withBase("/mobile-app-interface.png")}
               preset="slideInRight"
@@ -929,14 +937,16 @@ export function FeatureCarousel({
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="F1 Scores Chart"
-              className={cn(defaultClasses.img, "w-[40%] left-[58%] top-[8%]")}
+              className={cn(defaultClasses.img, "w-[50%] right-[54%]")}
+              style={{ top: "calc(33% + 115px)", right: "calc(54% - 28px)" }}
               layoutId="step2-1"
               src={withBase("/f1-scores-chart.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="Harbor Satellite Images"
-              className={cn(defaultClasses.img, "w-[40%] left-[58%] top-[42%]")}
+              className={cn(defaultClasses.img, "w-[42%] right-[9%]")}
+              style={{ top: "calc(48% + 80px)", right: "calc(8% - 10px)" }}
               layoutId="step2-2"
               src={withBase("/harbor-satellite-images.png")}
               preset="slideInRight"
@@ -948,23 +958,26 @@ export function FeatureCarousel({
         return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
-              alt="Neurolanche Main Logo"
+              alt="Neurolanche Brand Variant"
               className={cn(defaultClasses.img, "w-[25%] right-[70%] top-[5%]")}
+              style={{ top: "calc(23% + 80px)" }}
               layoutId="step3-1"
-              src={withBase("/neurolanche.svg")}
+              src={withBase("/neurolanche-4.svg")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
-              alt="Neurolanche Brand Variant"
+              alt="Neurolanche Main Logo"
               className={cn(defaultClasses.img, "w-[25%] right-[40%] top-[15%]")}
+              style={{ top: "calc(33% + 80px)" }}
               layoutId="step3-2"
-              src={withBase("/neurolanche-4.svg")}
+              src={withBase("/neurolanche.svg")}
               preset="fadeInScale"
               delay={0.1}
             />
             <AnimatedStepImage
               alt="Neurolanche Logo Alternative"
               className={cn(defaultClasses.img, "w-[25%] right-[10%] top-[25%]")}
+              style={{ top: "calc(43% + 80px)" }}
               layoutId="step3-3"
               src={withBase("/neurolanche-1.svg")}
               preset="slideInRight"
@@ -977,14 +990,16 @@ export function FeatureCarousel({
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Medical AI Diagnostic Interface"
-              className={cn(defaultClasses.img, "w-[45%] right-[54%] top-[5%]")}
+              className={cn(defaultClasses.img, "w-[50%] right-[54%]")}
+              style={{ top: "calc(33% + 115px)", right: "calc(54% - 28px)" }}
               layoutId="step4-1"
               src={withBase("/medical-ai-diagnostic-interface.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="U-Net Segmentation Results"
-              className={cn(defaultClasses.img, "w-[45%] right-[9%] top-[20%]")}
+              className={cn(defaultClasses.img, "w-[42%] right-[9%]")}
+              style={{ top: "calc(48% + 80px)", right: "calc(8% - 10px)" }}
               layoutId="step4-2"
               src={withBase("/u-net-tumor-segmentation.png")}
               preset="slideInRight"
@@ -997,14 +1012,16 @@ export function FeatureCarousel({
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Unity Game Development Interface"
-              className={cn(defaultClasses.img, "w-[45%] right-[54%] top-[5%]")}
+              className={cn(defaultClasses.img, "w-[50%] right-[54%]")}
+              style={{ top: "calc(33% + 115px)", right: "calc(54% - 28px)" }}
               layoutId="step5-1"
               src={withBase("/unity-interface.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="Mobile App Development Interface"
-              className={cn(defaultClasses.img, "w-[45%] right-[9%] top-[20%]")}
+              className={cn(defaultClasses.img, "w-[42%] right-[9%]")}
+              style={{ top: "calc(48% + 80px)", right: "calc(8% - 10px)" }}
               layoutId="step5-2"
               src={withBase("/mobile-app-interface.png")}
               preset="slideInRight"
@@ -1033,7 +1050,8 @@ export function FeatureCarousel({
               exit={ANIMATION_PRESETS.fadeInScale.exit}
               transition={{ ...(ANIMATION_PRESETS.fadeInScale.transition as any) }}
               className="absolute inset-0 z-0 w-full h-full pointer-events-none"
-              layout
+              initial={false}
+              style={{ opacity: expandedStep === step ? 0 : 1 }}
             >
               {renderStepContent()}
             </motion.div>
