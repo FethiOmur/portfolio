@@ -888,14 +888,14 @@ export function FeatureCarousel({
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="LLMetric Testimonials and Announcements"
-              className={cn(defaultClasses.img, "w-[45%] right-[54%] top-[5%]")}
+              className={cn(defaultClasses.img, "w-[40%] left-[58%] top-[8%]")}
               layoutId="step0-1"
               src={withBase("/llmetric-testimonials.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="LLMetric Search Interface"
-              className={cn(defaultClasses.img, "w-[45%] right-[9%] top-[20%]")}
+              className={cn(defaultClasses.img, "w-[40%] left-[58%] top-[42%]")}
               layoutId="step0-2"
               src={withBase("/llmetric-interface.png")}
               preset="slideInRight"
@@ -904,19 +904,19 @@ export function FeatureCarousel({
           </div>
         )
       case 1:
-        // Parking kartı: görseller geri getirildi, metnin arkasında konumlandırıldı
+        // Parking kartı: görseller geri getirildi, metnin sağında hizalandı
         return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Smart Parking IoT"
-              className={cn(defaultClasses.img, "w-[45%] right-[54%] top-[8%]")}
+              className={cn(defaultClasses.img, "w-[42%] left-[58%] top-[10%]")}
               layoutId="step1-1"
               src={withBase("/smart-parking-iot.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="Mobile App Interface"
-              className={cn(defaultClasses.img, "w-[45%] right-[9%] top-[25%]")}
+              className={cn(defaultClasses.img, "w-[38%] left-[60%] top-[48%]")}
               layoutId="step1-2"
               src={withBase("/mobile-app-interface.png")}
               preset="slideInRight"
@@ -929,14 +929,14 @@ export function FeatureCarousel({
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="F1 Scores Chart"
-              className={cn(defaultClasses.img, "w-[45%] right-[54%] top-[5%]")}
+              className={cn(defaultClasses.img, "w-[40%] left-[58%] top-[8%]")}
               layoutId="step2-1"
               src={withBase("/f1-scores-chart.png")}
               preset="slideInLeft"
             />
             <AnimatedStepImage
               alt="Harbor Satellite Images"
-              className={cn(defaultClasses.img, "w-[45%] right-[9%] top-[20%]")}
+              className={cn(defaultClasses.img, "w-[40%] left-[58%] top-[42%]")}
               layoutId="step2-2"
               src={withBase("/harbor-satellite-images.png")}
               preset="slideInRight"
