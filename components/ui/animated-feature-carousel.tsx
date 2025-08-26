@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { forwardRef, useCallback, useEffect, useState, useRef, type MouseEvent } from "react"
+import { forwardRef, useCallback, useEffect, useState, useRef } from "react"
 import {
   AnimatePresence,
   motion,
@@ -90,7 +90,7 @@ interface Step {
 }
 
 interface AnimatedStepImageProps {
-  preset?: string
+  preset?: keyof typeof ANIMATION_PRESETS
   delay?: number
   src: StaticImageData
   alt: string
@@ -352,15 +352,17 @@ const ANIMATION_PRESETS = {
 }
 
 const AnimatedStepImage = ({ preset = "fadeInScale", delay = 0, layoutId, className, ...props }: AnimatedStepImageProps) => {
-  const presetConfig = ANIMATION_PRESETS[preset]
+  const presetConfig = ANIMATION_PRESETS[preset] as any
   return (
     <MotionStepImage
       {...props}
       className={cn("transform-gpu", className)}
       layout
       layoutId={layoutId}
-      {...presetConfig}
-      transition={{ ...presetConfig.transition, delay, layout: { type: "spring", stiffness: 300, damping: 32, mass: 0.6 } }}
+      initial={presetConfig.initial}
+      animate={presetConfig.animate}
+      exit={presetConfig.exit}
+      transition={{ ...(presetConfig.transition as any), delay, layout: { type: "spring", stiffness: 300, damping: 32, mass: 0.6 } }}
     />
   )
 }
@@ -380,7 +382,7 @@ function FeatureCard({
   const mouseY = useMotionValue(0)
   const isMobile = useIsMobile()
 
-  function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
     if (isMobile) return
     const { left, top } = currentTarget.getBoundingClientRect()
     mouseX.set(clientX - left)
@@ -902,7 +904,7 @@ export function FeatureCarousel({
           </div>
         )
       case 1:
-        // Parking card: show previous images, right-aligned to avoid text overlap
+        // Parking kartı: görseller geri getirildi, metnin arkasında konumlandırıldı
         return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
@@ -1024,7 +1026,15 @@ export function FeatureCarousel({
       >
         <FeatureCard {...props} step={step} isExpanded={expandedStep === step} onToggleExpanded={handleToggleExpanded}>
           <AnimatePresence mode="wait">
-            <motion.div key={step} {...ANIMATION_PRESETS.fadeInScale} className="absolute inset-0 z-0 w-full h-full pointer-events-none" layout>
+            <motion.div
+              key={step}
+              initial={ANIMATION_PRESETS.fadeInScale.initial}
+              animate={ANIMATION_PRESETS.fadeInScale.animate}
+              exit={ANIMATION_PRESETS.fadeInScale.exit}
+              transition={{ ...(ANIMATION_PRESETS.fadeInScale.transition as any) }}
+              className="absolute inset-0 z-0 w-full h-full pointer-events-none"
+              layout
+            >
               {renderStepContent()}
             </motion.div>
           </AnimatePresence>
