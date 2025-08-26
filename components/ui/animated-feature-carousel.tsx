@@ -902,25 +902,8 @@ export function FeatureCarousel({
           </div>
         )
       case 1:
-        return (
-          <div className="relative w-full h-full">
-            <AnimatedStepImage
-              alt={image.alt}
-              className={cn(defaultClasses.img, step2img1Class)}
-              layoutId="step1-1"
-              src={withBase(image.step2img1 as string)}
-              preset="fadeInScale"
-            />
-            <AnimatedStepImage
-              alt={image.alt}
-              className={cn(defaultClasses.img, step2img2Class)}
-              layoutId="step1-2"
-              src={withBase(image.step2img2 as string)}
-              preset="fadeInScale"
-              delay={0.1}
-            />
-          </div>
-        )
+        // Parking card: hide images to avoid layout issues on some browsers
+        return <div className="relative w-full h-full" />
       case 2:
         return (
           <div className="relative w-full h-full">
