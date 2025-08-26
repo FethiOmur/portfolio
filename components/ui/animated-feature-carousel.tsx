@@ -404,7 +404,7 @@ function FeatureCard({
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              className="flex w-full flex-col gap-3 sm:gap-4 md:w-3/5 transform-gpu"
+              className="relative z-10 flex w-full flex-col gap-3 sm:gap-4 md:w-3/5 transform-gpu"
               initial={{ opacity: 0.001, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
@@ -1024,7 +1024,7 @@ export function FeatureCarousel({
       >
         <FeatureCard {...props} step={step} isExpanded={expandedStep === step} onToggleExpanded={handleToggleExpanded}>
           <AnimatePresence mode="wait">
-            <motion.div key={step} {...ANIMATION_PRESETS.fadeInScale} className="w-full h-full absolute" layout>
+            <motion.div key={step} {...ANIMATION_PRESETS.fadeInScale} className="absolute inset-0 z-0 w-full h-full pointer-events-none" layout>
               {renderStepContent()}
             </motion.div>
           </AnimatePresence>
