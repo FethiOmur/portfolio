@@ -396,7 +396,7 @@ function FeatureCard({
     >
       <div className="relative w-full overflow-hidden rounded-3xl border border-neutral-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-neutral-900 will-change-transform">
         <motion.div
-          className="m-10 w-full transform-gpu"
+          className="w-full transform-gpu m-6 sm:m-8 md:m-10"
           layout
           style={{ minHeight: isExpanded ? "600px" : "450px" }}
           transition={{ type: "spring", stiffness: 240, damping: 34, mass: 0.7 }}
@@ -404,7 +404,7 @@ function FeatureCard({
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              className="flex w-full flex-col gap-4 md:w-3/5 transform-gpu"
+              className="flex w-full flex-col gap-3 sm:gap-4 md:w-3/5 transform-gpu"
               initial={{ opacity: 0.001, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
@@ -419,7 +419,7 @@ function FeatureCard({
                 {steps[step].name}
               </motion.div>
               <motion.h2
-                className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 md:text-3xl cursor-pointer hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
+                className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 cursor-pointer hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1, duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
@@ -431,7 +431,7 @@ function FeatureCard({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.15, duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               >
-                <p className="text-base leading-relaxed text-neutral-700 dark:text-neutral-400">
+                <p className="text-sm sm:text-base leading-relaxed text-neutral-700 dark:text-neutral-400 break-words">
                   {isExpanded ? steps[step].detailedDescription : steps[step].description}
                 </p>
               </motion.div>
@@ -902,8 +902,8 @@ export function FeatureCarousel({
           </div>
         )
       case 1:
-        // Parking card: hide images to avoid layout issues on some browsers
-        return <div className="relative w-full h-full" />
+        // Parking card: hide all images on web to avoid layout issues
+        return null
       case 2:
         return (
           <div className="relative w-full h-full">
