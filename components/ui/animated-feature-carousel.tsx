@@ -1050,7 +1050,6 @@ export function FeatureCarousel({
               exit={ANIMATION_PRESETS.fadeInScale.exit}
               transition={{ ...(ANIMATION_PRESETS.fadeInScale.transition as any) }}
               className="absolute inset-0 z-0 w-full h-full pointer-events-none"
-              initial={false}
               style={{ opacity: expandedStep === step ? 0 : 1 }}
             >
               {renderStepContent()}
