@@ -902,8 +902,26 @@ export function FeatureCarousel({
           </div>
         )
       case 1:
-        // Parking card: hide all images on web to avoid layout issues
-        return null
+        // Parking card: show previous images, right-aligned to avoid text overlap
+        return (
+          <div className="relative w-full h-full">
+            <AnimatedStepImage
+              alt="Smart Parking IoT"
+              className={cn(defaultClasses.img, "w-[45%] right-[54%] top-[8%]")}
+              layoutId="step1-1"
+              src={withBase("/smart-parking-iot.png")}
+              preset="slideInLeft"
+            />
+            <AnimatedStepImage
+              alt="Mobile App Interface"
+              className={cn(defaultClasses.img, "w-[45%] right-[9%] top-[25%]")}
+              layoutId="step1-2"
+              src={withBase("/mobile-app-interface.png")}
+              preset="slideInRight"
+              delay={0.1}
+            />
+          </div>
+        )
       case 2:
         return (
           <div className="relative w-full h-full">
