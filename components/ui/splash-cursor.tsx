@@ -296,7 +296,7 @@ function SplashCursor({
         }
       `
     );
-    
+
     const copyShader = compileShader(
       gl.FRAGMENT_SHADER,
       `
@@ -819,9 +819,17 @@ function SplashCursor({
     let colorUpdateTimer = 0.0;
     let isPaused = false;
 
-    let rafId = 0
+    let rafId: number = 0
+    let isIdle = false
+    let idleTimeout: ReturnType<typeof setTimeout> | null = null
+    const IDLE_DELAY = 2000 // 2 saniye hareketsizlik sonrası idle'a geç
 
     function updateFrame(now = performance.now()) {
+      // Idle durumunda animasyonu durdur
+      if (isIdle) {
+        rafId = requestAnimationFrame(updateFrame)
+        return
+      }
       if (isPaused) {
         rafId = requestAnimationFrame(updateFrame);
         return;
@@ -1213,6 +1221,17 @@ function SplashCursor({
     document.body.addEventListener("mousemove", handleFirstMouseMove, { passive: true } as any);
 
     const onMouseMove = (e: MouseEvent) => {
+      // Fareyi hareket ettirince idle'dan çık
+      if (isIdle) {
+        isIdle = false
+      }
+      if (idleTimeout) {
+        clearTimeout(idleTimeout)
+      }
+      idleTimeout = setTimeout(() => {
+        isIdle = true
+      }, IDLE_DELAY)
+
       let pointer = pointers[0];
       let posX = scaleByPixelRatio(e.clientX);
       let posY = scaleByPixelRatio(e.clientY);
@@ -1274,6 +1293,29 @@ function SplashCursor({
     document.addEventListener("visibilitychange", onVisibility);
 
     updateFrame();
+
+    // Cleanup function - TÜM event listenerları ve animasyon frame'i temizle
+    return () => {
+      // Animation frame'i durdur
+      if (rafId) {
+        cancelAnimationFrame(rafId)
+      }
+
+      // Idle timeout'u temizle
+      if (idleTimeout) {
+        clearTimeout(idleTimeout)
+      }
+
+      // TÜM event listenerları gerçek referanslarıyla kaldır
+      window.removeEventListener("mousedown", onMouseDown)
+      window.removeEventListener("mousemove", onMouseMove)
+      window.removeEventListener("touchstart", onTouchStart)
+      window.removeEventListener("touchmove", onTouchMove)
+      window.removeEventListener("touchend", onTouchEnd)
+      document.body.removeEventListener("mousemove", handleFirstMouseMove)
+      document.body.removeEventListener("touchstart", handleFirstTouchStart)
+      document.removeEventListener("visibilitychange", onVisibility)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     SIM_RESOLUTION,
@@ -1291,23 +1333,6 @@ function SplashCursor({
     BACK_COLOR,
     TRANSPARENT,
   ]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      try {
-        cancelAnimationFrame((window as any).rafId);
-      } catch {}
-      window.removeEventListener("mousedown", (null as any));
-      window.removeEventListener("mousemove", (null as any));
-      window.removeEventListener("touchstart", (null as any));
-      window.removeEventListener("touchmove", (null as any));
-      window.removeEventListener("touchend", (null as any));
-      document.body.removeEventListener("mousemove", (null as any));
-      document.body.removeEventListener("touchstart", (null as any));
-      document.removeEventListener("visibilitychange", (null as any));
-    }
-  }, [])
 
   return (
     <div className="fixed top-0 left-0 z-50 pointer-events-none opacity-50">

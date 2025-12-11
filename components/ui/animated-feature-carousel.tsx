@@ -101,11 +101,40 @@ interface AnimatedStepImageProps {
 }
 
 // --- Constants ---
-const TOTAL_STEPS = 6
+const TOTAL_STEPS = 7
 
 const steps: readonly Step[] = [
   {
     id: "1",
+    name: "RouteRush",
+    title: "RouteRush",
+    description:
+      "iOS application that transforms running and cycling activities into a territory-based game on a live 3D globe, where users compete for dominance in geographic cells.",
+    detailedDescription:
+      "RouteRush transforms running and cycling activities into a territory-based game on a 3D interactive map. Users compete for dominance in H3 hexagonal cells by accumulating activity scores. The app features a stunning 3D globe visualization using Mapbox Native SDK, real-time GPS tracking with anti-cheat mechanisms, density-based heatmaps showing user dominance, and a sophisticated cell scoring system. Built with SwiftUI for iOS, Supabase backend, and H3 geospatial indexing for precise territory management.",
+    technologies: [
+      "Swift",
+      "SwiftUI",
+      "Mapbox SDK",
+      "Supabase",
+      "PostGIS",
+      "H3 Geospatial",
+      "iOS",
+      "Real-time GPS",
+      "3D Globe",
+    ],
+    achievements: [
+      "Built 3D globe visualization with Mapbox Native SDK featuring smooth zoom transitions from globe to street level",
+      "Implemented H3 hexagonal cell system for precise territory scoring and dominance tracking",
+      "Developed real-time GPS tracking with anti-cheat mechanisms (speed limits, GPS quality filtering)",
+      "Created density map visualization showing user dominance with color-scaled heatmaps",
+      "Designed offline-first architecture with seamless sync when connectivity returns",
+    ],
+    duration: "2024 - Present",
+    role: "Lead iOS Developer & Architect",
+  },
+  {
+    id: "2",
     name: "LLMetric",
     title: "LLMetric: AI Discovery & Comparison Platform",
     description:
@@ -123,7 +152,7 @@ const steps: readonly Step[] = [
     role: "Lead Developer & AI Architect",
   },
   {
-    id: "2",
+    id: "3",
     name: "Parking",
     title: "OPS Smart Parking IoT Solution",
     description:
@@ -147,7 +176,7 @@ const steps: readonly Step[] = [
     role: "CEO & Founder",
   },
   {
-    id: "3",
+    id: "4",
     name: "Satellite",
     title: "Satellite Image Analysis: Land Use Classification",
     description:
@@ -175,7 +204,7 @@ const steps: readonly Step[] = [
     role: "Computer Vision Engineer & Research Assistant",
   },
   {
-    id: "4",
+    id: "5",
     name: "Nerox",
     title: "Nerox AI",
     description:
@@ -202,7 +231,7 @@ const steps: readonly Step[] = [
     role: "Mobile & AI Developer",
   },
   {
-    id: "5",
+    id: "6",
     name: "Medical",
     title: "AI-Powered Breast Cancer Diagnostics",
     description:
@@ -230,7 +259,7 @@ const steps: readonly Step[] = [
     role: "AI Research Developer",
   },
   {
-    id: "6",
+    id: "7",
     name: "Gaming",
     title: "Mobile & Game Development",
     description:
@@ -282,15 +311,34 @@ function useNumberCycler(totalSteps: number = TOTAL_STEPS, interval = 5000, isPa
 }
 
 function useIsMobile() {
+  // SSR'da ve ilk render'da false döndür, hydration tamamlandıktan sonra gerçek değeri kullan
   const [isMobile, setIsMobile] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
+
   useEffect(() => {
+    setHasMounted(true)
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null
+
     const checkDevice = () => {
       setIsMobile(window.matchMedia("(max-width: 768px)").matches)
     }
-    checkDevice()
-    window.addEventListener("resize", checkDevice)
-    return () => window.removeEventListener("resize", checkDevice)
+
+    const debouncedCheckDevice = () => {
+      if (debounceTimer) clearTimeout(debounceTimer)
+      debounceTimer = setTimeout(checkDevice, 150)
+    }
+
+    checkDevice() // İlk kontrol
+    window.addEventListener("resize", debouncedCheckDevice)
+
+    return () => {
+      window.removeEventListener("resize", debouncedCheckDevice)
+      if (debounceTimer) clearTimeout(debounceTimer)
+    }
   }, [])
+
+  // Hydration tamamlanana kadar false döndür
+  if (!hasMounted) return false
   return isMobile
 }
 
@@ -383,6 +431,10 @@ function FeatureCard({
   const mouseY = useMotionValue(0)
   const isMobile = useIsMobile()
 
+  // useMotionTemplate'i render dışında memoize et
+  const xTemplate = useMotionTemplate`${mouseX}px`
+  const yTemplate = useMotionTemplate`${mouseY}px`
+
   function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
     if (isMobile) return
     const { left, top } = currentTarget.getBoundingClientRect()
@@ -395,23 +447,30 @@ function FeatureCard({
       className="animated-cards group relative w-full rounded-2xl"
       onMouseMove={handleMouseMove}
       onClick={onToggleExpanded}
-      style={{ "--x": useMotionTemplate`${mouseX}px`, "--y": useMotionTemplate`${mouseY}px` } as WrapperStyle}
     >
-      <div className="relative w-full overflow-hidden rounded-3xl border border-neutral-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-neutral-900 will-change-transform">
+      <div className={cn(
+        "relative w-full rounded-3xl border border-neutral-200 bg-white transition-colors duration-300 dark:border-neutral-800 dark:bg-neutral-900",
+        !isExpanded && "overflow-hidden"
+      )}>
         <motion.div
-          className="w-full transform-gpu m-6 sm:m-8 md:m-10"
-          layout
-          style={{ minHeight: isMobile ? "auto" : isExpanded ? "600px" : "450px" }}
-          transition={{ type: "spring", stiffness: 240, damping: 34, mass: 0.7 }}
+          className="w-full p-6 sm:p-8 md:p-10"
+          layout="position"
+          style={{ minHeight: isMobile ? "auto" : isExpanded ? "auto" : "450px" }}
+          transition={{
+            layout: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }
+          }}
         >
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              className="relative z-10 flex w-full flex-col gap-3 sm:gap-4 md:w-3/5 transform-gpu"
-              initial={{ opacity: 0.001, y: 12 }}
+              className={cn(
+                "relative z-10 flex w-full flex-col gap-3 sm:gap-4",
+                !isExpanded && "md:w-3/5"
+              )}
+              initial={{ opacity: 0.01, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
             >
               <motion.div
                 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400"
@@ -491,6 +550,112 @@ function FeatureCard({
                     {step === 0 && (
                       <div className="mt-8">
                         <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-4">
+                          App Screenshots
+                        </h4>
+                        <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
+                          <motion.img
+                            src={withBase("/routerush/rr-globe-view.png")}
+                            alt="RouteRush 3D Globe View"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.02, duration: 0.2 }}
+                          />
+                          <motion.img
+                            src={withBase("/routerush/rr-onboarding.png")}
+                            alt="RouteRush Onboarding"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.04, duration: 0.2 }}
+                          />
+                          <motion.img
+                            src={withBase("/routerush/rr-screen-6.png")}
+                            alt="RouteRush Activity Detail"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.06, duration: 0.2 }}
+                          />
+                          <motion.img
+                            src={withBase("/routerush/rr-screen-7.png")}
+                            alt="RouteRush Activity Summary"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.08, duration: 0.2 }}
+                          />
+                          <motion.img
+                            src={withBase("/routerush/rr-map-3d.png")}
+                            alt="RouteRush 3D Map"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1, duration: 0.2 }}
+                          />
+                          <motion.img
+                            src={withBase("/routerush/rr-tracking.png")}
+                            alt="RouteRush GPS Tracking"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.12, duration: 0.2 }}
+                          />
+                          <motion.img
+                            src={withBase("/routerush/rr-screen-6-new.png")}
+                            alt="RouteRush Feature"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.14, duration: 0.2 }}
+                          />
+                          <motion.img
+                            src={withBase("/routerush/rr-route.png")}
+                            alt="RouteRush Route View"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.16, duration: 0.2 }}
+                          />
+                          <motion.img
+                            src={withBase("/routerush/rr-activity.png")}
+                            alt="RouteRush Activity List"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.18, duration: 0.2 }}
+                          />
+                          <motion.img
+                            src={withBase("/routerush/rr-screen-10.png")}
+                            alt="RouteRush Statistics"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2, duration: 0.2 }}
+                          />
+                          <motion.img
+                            src={withBase("/routerush/rr-screen-11.png")}
+                            alt="RouteRush Profile"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.22, duration: 0.2 }}
+                          />
+                          <motion.img
+                            src={withBase("/routerush/rr-clubs.png")}
+                            alt="RouteRush Clubs"
+                            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-lg"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.24, duration: 0.2 }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {step === 1 && (
+                      <div className="mt-8">
+                        <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-4">
                           Platform Interface
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -501,15 +666,6 @@ function FeatureCard({
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            onClick={(e) => {
-                              // handleImageClick("/llmetric-testimonials.png", e)
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.transform = "scale(1.02)"
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.transform = "scale(1)"
-                            }}
                           />
                           <motion.img
                             src={withBase("/llmetric-interface.png")}
@@ -518,21 +674,12 @@ function FeatureCard({
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            onClick={(e) => {
-                              // handleImageClick("/llmetric-interface.png", e)
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.transform = "scale(1.02)"
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.transform = "scale(1)"
-                            }}
                           />
                         </div>
                       </div>
                     )}
 
-                    {step === 2 && (
+                    {step === 7 && (
                       <div className="mt-8">
                         <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-4">
                           Development Interface
@@ -581,13 +728,13 @@ function FeatureCard({
                             transition={{ delay: 0.35 }}
                             title="Download: Fethi Omur Environment Final Report"
                           >
-                            <span className="text-center text-sm">Download PDF<br/>Fethi Omur Environment Final Report</span>
+                            <span className="text-center text-sm">Download PDF<br />Fethi Omur Environment Final Report</span>
                           </motion.a>
                         </div>
                       </div>
                     )}
 
-                    {step === 3 && (
+                    {step === 5 && (
                       <div className="mt-8">
                         <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-4">
                           AI Development Interface
@@ -648,7 +795,7 @@ function FeatureCard({
                       </div>
                     )}
 
-                    {step === 4 && (
+                    {step === 6 && (
                       <div className="mt-8">
                         <h4 className="text-sm font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-4">
                           Medical AI Interface
@@ -888,13 +1035,37 @@ export function FeatureCarousel({
     if (expanded) return null
     switch (step) {
       case 0:
+        // RouteRush
+        return (
+          <div className="relative w-full h-full">
+            <AnimatedStepImage
+              alt="RouteRush 3D Globe View"
+              className={cn(defaultClasses.img, "w-[50%] right-[54%]")}
+              style={{ top: "calc(33% + 115px)", right: "calc(54% - 28px)" }}
+              layoutId="step0-1"
+              src={withBase("/routerush/rr-globe-view.png")}
+              preset="slideInLeft"
+            />
+            <AnimatedStepImage
+              alt="RouteRush Density Map"
+              className={cn(defaultClasses.img, "w-[42%] right-[9%]")}
+              style={{ top: "calc(48% + 80px)", right: "calc(8% - 10px)" }}
+              layoutId="step0-2"
+              src={withBase("/routerush/rr-map-3d.png")}
+              preset="slideInRight"
+              delay={0.1}
+            />
+          </div>
+        )
+      case 1:
+        // LLMetric
         return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="LLMetric Search Interface"
               className={cn(defaultClasses.img, "w-[50%] right-[54%]")}
               style={{ top: "calc(33% + 115px)", right: "calc(54% - 28px)" }}
-              layoutId="step0-1"
+              layoutId="step1-1"
               src={withBase("/llmetric-interface.png")}
               preset="slideInLeft"
             />
@@ -902,22 +1073,22 @@ export function FeatureCarousel({
               alt="LLMetric Testimonials and Announcements"
               className={cn(defaultClasses.img, "w-[42%] right-[9%]")}
               style={{ top: "calc(48% + 80px)", right: "calc(8% - 10px)" }}
-              layoutId="step0-2"
+              layoutId="step1-2"
               src={withBase("/llmetric-testimonials.png")}
               preset="slideInRight"
               delay={0.1}
             />
           </div>
         )
-      case 1:
-        // Parking kartı: önceki düzen korunur, sadece dikeyde aşağı kaydırılır
+      case 2:
+        // Parking kartı
         return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Smart Parking IoT"
               className={cn(defaultClasses.img, "w-[50%] right-[54%]")}
               style={{ top: "calc(33% + 115px)", right: "calc(54% - 28px)" }}
-              layoutId="step1-1"
+              layoutId="step2-1"
               src={withBase("/smart-parking-iot.png")}
               preset="slideInLeft"
             />
@@ -925,21 +1096,22 @@ export function FeatureCarousel({
               alt="Mobile App Interface"
               className={cn(defaultClasses.img, "w-[42%] right-[9%]")}
               style={{ top: "calc(48% + 80px)", right: "calc(8% - 10px)" }}
-              layoutId="step1-2"
+              layoutId="step2-2"
               src={withBase("/mobile-app-interface.png")}
               preset="slideInRight"
               delay={0.1}
             />
           </div>
         )
-      case 2:
+      case 3:
+        // Satellite
         return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="F1 Scores Chart"
               className={cn(defaultClasses.img, "w-[50%] right-[54%]")}
               style={{ top: "calc(33% + 115px)", right: "calc(54% - 28px)" }}
-              layoutId="step2-1"
+              layoutId="step3-1"
               src={withBase("/f1-scores-chart.png")}
               preset="slideInLeft"
             />
@@ -947,21 +1119,22 @@ export function FeatureCarousel({
               alt="Harbor Satellite Images"
               className={cn(defaultClasses.img, "w-[42%] right-[9%]")}
               style={{ top: "calc(48% + 80px)", right: "calc(8% - 10px)" }}
-              layoutId="step2-2"
+              layoutId="step3-2"
               src={withBase("/harbor-satellite-images.png")}
               preset="slideInRight"
               delay={0.1}
             />
           </div>
         )
-      case 3:
+      case 4:
+        // Nerox
         return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Neurolanche Brand Variant"
               className={cn(defaultClasses.img, "w-[25%] right-[70%] top-[5%]")}
               style={{ top: "calc(23% + 80px)" }}
-              layoutId="step3-1"
+              layoutId="step4-1"
               src={withBase("/neurolanche-4.svg")}
               preset="slideInLeft"
             />
@@ -969,7 +1142,7 @@ export function FeatureCarousel({
               alt="Neurolanche Main Logo"
               className={cn(defaultClasses.img, "w-[25%] right-[40%] top-[15%]")}
               style={{ top: "calc(33% + 80px)" }}
-              layoutId="step3-2"
+              layoutId="step4-2"
               src={withBase("/neurolanche.svg")}
               preset="fadeInScale"
               delay={0.1}
@@ -978,21 +1151,22 @@ export function FeatureCarousel({
               alt="Neurolanche Logo Alternative"
               className={cn(defaultClasses.img, "w-[25%] right-[10%] top-[25%]")}
               style={{ top: "calc(43% + 80px)" }}
-              layoutId="step3-3"
+              layoutId="step4-3"
               src={withBase("/neurolanche-1.svg")}
               preset="slideInRight"
               delay={0.2}
             />
           </div>
         )
-      case 4:
+      case 5:
+        // Medical
         return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Medical AI Diagnostic Interface"
               className={cn(defaultClasses.img, "w-[50%] right-[54%]")}
               style={{ top: "calc(33% + 115px)", right: "calc(54% - 28px)" }}
-              layoutId="step4-1"
+              layoutId="step5-1"
               src={withBase("/medical-ai-diagnostic-interface.png")}
               preset="slideInLeft"
             />
@@ -1000,21 +1174,22 @@ export function FeatureCarousel({
               alt="U-Net Segmentation Results"
               className={cn(defaultClasses.img, "w-[42%] right-[9%]")}
               style={{ top: "calc(48% + 80px)", right: "calc(8% - 10px)" }}
-              layoutId="step4-2"
+              layoutId="step5-2"
               src={withBase("/u-net-tumor-segmentation.png")}
               preset="slideInRight"
               delay={0.1}
             />
           </div>
         )
-      case 5:
+      case 6:
+        // Gaming
         return (
           <div className="relative w-full h-full">
             <AnimatedStepImage
               alt="Unity Game Development Interface"
               className={cn(defaultClasses.img, "w-[50%] right-[54%]")}
               style={{ top: "calc(33% + 115px)", right: "calc(54% - 28px)" }}
-              layoutId="step5-1"
+              layoutId="step6-1"
               src={withBase("/unity-interface.png")}
               preset="slideInLeft"
             />
@@ -1022,7 +1197,7 @@ export function FeatureCarousel({
               alt="Mobile App Development Interface"
               className={cn(defaultClasses.img, "w-[42%] right-[9%]")}
               style={{ top: "calc(48% + 80px)", right: "calc(8% - 10px)" }}
-              layoutId="step5-2"
+              layoutId="step6-2"
               src={withBase("/mobile-app-interface.png")}
               preset="slideInRight"
               delay={0.1}
