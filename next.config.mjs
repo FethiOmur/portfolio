@@ -9,10 +9,10 @@ const nextConfig = {
     NEXT_PUBLIC_BASE_PATH: basePath,
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   images: {
     unoptimized: true,

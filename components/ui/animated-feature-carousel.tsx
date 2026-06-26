@@ -20,8 +20,8 @@ const cn = (...classes: (string | boolean | undefined)[]) => {
   return classes.filter(Boolean).join(" ")
 }
 
-// Placeholder for image assets if they are not found.
-const placeholderImage = (text = "Image") => `https://placehold.co/600x400/1a1a1a/ffffff?text=${text}`
+// Placeholder for image assets if they are not found (local asset, no third-party request).
+const placeholderImage = (_text = "Image") => `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/placeholder.svg`
 
 // Base path helper for GitHub Pages (project subpath)
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
