@@ -1,25 +1,24 @@
 name: Deploy to GitHub Pages
 
-# Pages source = main branch /docs folder.
-# On a source push, rebuild the static export into docs/ and commit it back.
-# `paths-ignore: docs/**` prevents the docs commit from re-triggering this workflow.
+# Pages source = GitHub Actions. Build the Next.js static export and deploy
+# the ./out artifact via actions/deploy-pages (no built files committed to git).
 
 on:
   push:
     branches: ["main"]
-    paths-ignore:
-      - "docs/**"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-  group: pages-deploy
+  group: "pages"
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,23 +33,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build static export (-> docs/)
+      - name: Build (Next.js static export)
         env:
           GITHUB_PAGES: "true"
           BASE_PATH: "/portfolio"
           NEXT_PUBLIC_BASE_PATH: "/portfolio"
           NEXT_TELEMETRY_DISABLED: "1"
           CI: "true"
-        run: npm run export
+        run: npm run build
 
-      - name: Commit and push docs/
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs
-          if git diff --staged --quiet; then
-            echo "No docs/ changes to commit."
-          else
-            git commit -m "chore: rebuild docs [skip ci]"
-            git push
-          fi
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./out"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
