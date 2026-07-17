@@ -208,12 +208,16 @@ const projects: Project[] = [
 const N = projects.length
 
 // --- Agent network graphic (Fethiverse) ---
+// Round to fixed precision so server- and client-rendered SVG coordinate strings
+// match exactly (avoids float-formatting hydration mismatches).
+const r2 = (n: number) => Math.round(n * 100) / 100
+
 const AGENT_NODES = Array.from({ length: 9 }, (_, i) => {
   const angle = (-90 + i * (360 / 9)) * (Math.PI / 180)
-  const r = 118
+  const rad = 118
   return {
-    x: 200 + r * Math.cos(angle),
-    y: 200 + r * Math.sin(angle),
+    x: r2(200 + rad * Math.cos(angle)),
+    y: r2(200 + rad * Math.sin(angle)),
     label: ["Research", "", "Copy", "", "Art", "", "Editor", "", ""][i],
   }
 })
@@ -234,10 +238,10 @@ function AgentNetwork() {
             return (
               <line
                 key={i}
-                x1={200 + 170 * Math.cos(a)}
-                y1={200 + 170 * Math.sin(a)}
-                x2={200 + 176 * Math.cos(a)}
-                y2={200 + 176 * Math.sin(a)}
+                x1={r2(200 + 170 * Math.cos(a))}
+                y1={r2(200 + 170 * Math.sin(a))}
+                x2={r2(200 + 176 * Math.cos(a))}
+                y2={r2(200 + 176 * Math.sin(a))}
                 stroke="currentColor"
                 strokeOpacity={i % 5 === 0 ? 0.35 : 0.15}
                 strokeWidth="1"
