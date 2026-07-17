@@ -187,13 +187,23 @@ export default function Home() {
           <div className="space-y-16">
             <div className="flex items-end justify-between">
               <h2 className="text-3xl sm:text-4xl font-light">Selected Work</h2>
-              <div className="hidden sm:block text-sm text-muted-foreground font-mono">2020 — 2025</div>
+              <div className="hidden sm:block text-sm text-muted-foreground font-mono">2020 — 2026</div>
             </div>
 
             <div className="space-y-8 sm:space-y-12">
               {[
                 {
+                  year: "2026",
+                  period: "Jan 2026 — Present",
+                  role: "AI & Full-Stack Developer",
+                  company: "SmartCreative SRL, Milan",
+                  description:
+                    "Automated the company's design-to-code workflow end-to-end with Figma MCP, cutting frontend implementation from days to hours. Built internal AI automation and agentic workflows across the development process. Full-stack delivery certified at level 5 (\"Sviluppatore Software: Full Stack e AI\").",
+                  tech: ["Figma MCP", "Design-to-Code", "AI Automation", "Agentic Workflows", "Full-Stack", "Next.js", "TypeScript"],
+                },
+                {
                   year: "2025",
+                  period: "2025 — Jan 2026",
                   role: "Advanced AI Data Trainer",
                   company: "Outlier",
                   description:
@@ -202,6 +212,7 @@ export default function Home() {
                 },
                 {
                   year: "2024",
+                  period: "",
                   role: "AI Engineer",
                   company: "Neurolanche X Labs",
                   description:
@@ -210,6 +221,7 @@ export default function Home() {
                 },
                 {
                   year: "2022",
+                  period: "",
                   role: "Software Trainee",
                   company: "Google Turkey AI and Technology Academy",
                   description:
@@ -218,6 +230,7 @@ export default function Home() {
                 },
                 {
                   year: "2022",
+                  period: "",
                   role: "Unity Game Developer",
                   company: "Gamebow",
                   description: "Developed four hyper‑casual games; each surpassed 10,000 downloads in the first month and improved player engagement through iterative design.",
@@ -225,6 +238,7 @@ export default function Home() {
                 },
                 {
                   year: "2020",
+                  period: "",
                   role: "CEO & Founder",
                   company: "Inodea Information Tech",
                   description:
@@ -246,6 +260,9 @@ export default function Home() {
                     <div>
                       <h3 className="text-lg sm:text-xl font-medium">{job.role}</h3>
                       <div className="text-muted-foreground">{job.company}</div>
+                      {job.period && (
+                        <div className="mt-1 text-xs font-mono text-muted-foreground/70">{job.period}</div>
+                      )}
                     </div>
                     <p className="text-muted-foreground leading-relaxed">{job.description}</p>
                   </div>
