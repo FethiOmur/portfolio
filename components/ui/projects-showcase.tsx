@@ -16,7 +16,7 @@ const withBase = (p: string) => (p.startsWith("http") ? p : `${basePath}${p}`)
 const EASE = [0.22, 1, 0.36, 1] as const
 
 // --- Types ---
-type VisualKind = "graphic" | "phone" | "web"
+type VisualKind = "graphic" | "phone" | "web" | "store"
 
 interface Visual {
   src: string
@@ -165,8 +165,12 @@ const projects: Project[] = [
       "Advanced augmentation: substitution, reordering, back-translation",
     ],
     tech: ["Python", "PyTorch", "TensorFlow", "LLM Optimization", "Quantization"],
-    kind: "web",
-    visuals: [{ src: withBase("/nerox-ai-app.png"), alt: "Nerox AI application", fit: "contain" }],
+    kind: "store",
+    visuals: [
+      { src: withBase("/nerox/appstore.jpg"), alt: "Nerox AI listing on the App Store" },
+      { src: withBase("/nerox/marketing-emotional.jpg"), alt: "Nerox AI — Your Emotional Friend marketing screen" },
+      { src: withBase("/nerox/marketing-inspiration.jpg"), alt: "Nerox AI — Find creative inspiration chat screen" },
+    ],
   },
   {
     id: "medical",
@@ -380,10 +384,18 @@ function WindowFrame({
   )
 }
 
-function CoverFrame({ visual, className }: { visual: Visual; className?: string }) {
+function CoverFrame({
+  visual,
+  className,
+  aspect = "aspect-[4/5]",
+}: {
+  visual: Visual
+  className?: string
+  aspect?: string
+}) {
   return (
     <div className={cn("overflow-hidden rounded-xl border border-border bg-card shadow-2xl shadow-black/30", className)}>
-      <img src={visual.src} alt={visual.alt} loading="lazy" className="aspect-[4/5] w-full object-cover" />
+      <img src={visual.src} alt={visual.alt} loading="lazy" className={cn("w-full object-cover", aspect)} />
     </div>
   )
 }
@@ -400,6 +412,21 @@ function ProjectVisual({ project }: { project: Project }) {
         <span className="pointer-events-none absolute inset-x-0 bottom-0 text-center font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70">
           Sample outputs · fully autonomous runs
         </span>
+      </div>
+    )
+  }
+
+  if (project.kind === "store") {
+    const [store, m1, m2] = project.visuals
+    return (
+      <div className="relative w-full max-w-[470px] pb-8">
+        {store ? <WindowFrame visual={store} className="relative z-0 w-[86%]" /> : null}
+        {m1 ? (
+          <CoverFrame visual={m1} aspect="aspect-[9/19.5]" className="absolute right-10 top-14 z-10 w-[122px] -rotate-2" />
+        ) : null}
+        {m2 ? (
+          <CoverFrame visual={m2} aspect="aspect-[9/19.5]" className="absolute -right-1 top-24 z-20 w-[122px] rotate-3" />
+        ) : null}
       </div>
     )
   }
