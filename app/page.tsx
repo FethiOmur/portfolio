@@ -129,7 +129,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-5 gap-16 w-full">
             <div className="lg:col-span-3 space-y-8">
               <div className="space-y-2">
-                <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2025</div>
+                <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2026</div>
                 <h1 className="text-6xl lg:text-7xl font-light tracking-tight">
                   Fethi
                   <br />
@@ -139,10 +139,11 @@ export default function Home() {
 
               <div className="space-y-6 max-w-md">
                 <p className="text-xl text-muted-foreground leading-relaxed">
-                  AI Engineer crafting intelligent systems at the intersection of
-                  <span className="text-foreground"> machine learning</span>,
-                  <span className="text-foreground"> deep learning</span>, and
-                  <span className="text-foreground"> scalable AI solutions</span>.
+                  AI Engineer building
+                  <span className="text-foreground"> multi-agent systems</span> and
+                  <span className="text-foreground"> LLM-powered products</span> with the
+                  <span className="text-foreground"> Claude Agent SDK</span> and
+                  <span className="text-foreground"> MCP</span> — grounded in deep learning and scalable AI.
                 </p>
 
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -159,16 +160,16 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="text-sm text-muted-foreground font-mono">CURRENTLY</div>
                 <div className="space-y-2">
-                  <div className="text-foreground">Advanced AI Data Trainer</div>
-                  <div className="text-muted-foreground">@ Outlier</div>
-                  <div className="text-xs text-muted-foreground">2025 — Present</div>
+                  <div className="text-foreground">AI &amp; Full-Stack Developer</div>
+                  <div className="text-muted-foreground">@ SmartCreative SRL, Milan</div>
+                  <div className="text-xs text-muted-foreground">Jan 2026 — Present</div>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="text-sm text-muted-foreground font-mono">FOCUS</div>
                 <div className="flex flex-wrap gap-2">
-                  {["Python", "PyTorch", "TensorFlow", "LLM Fine-tuning", "Azure AI", "Docker"].map((skill) => (
+                  {["Claude Agent SDK", "MCP", "Claude / OpenAI / Gemini APIs", "Google ADK", "Agent harnesses & evals", "Next.js", "Python", "PyTorch", "TensorFlow", "LLM Fine-tuning", "Azure AI", "Docker"].map((skill) => (
                     <span
                       key={skill}
                       className="px-3 py-1 text-xs border border-border rounded-full hover:border-muted-foreground/50 transition-colors duration-300"
