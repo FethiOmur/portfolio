@@ -65,7 +65,10 @@ const projects: Project[] = [
       "AI Image Generation",
     ],
     kind: "graphic",
-    visuals: [],
+    visuals: [
+      { src: withBase("/fethiverse/cover-altman.jpg"), alt: "Sample output — AI-news cover on OpenAI's IPO, generated autonomously by the pipeline" },
+      { src: withBase("/fethiverse/cover-dario.jpg"), alt: "Sample output — AI-news cover on Anthropic, generated autonomously by the pipeline" },
+    ],
   },
   {
     id: "routerush",
@@ -223,10 +226,21 @@ const AGENT_NODES = Array.from({ length: 9 }, (_, i) => {
   }
 })
 
-function AgentNetwork() {
+function AgentNetwork({ backdrop = false }: { backdrop?: boolean }) {
   return (
-    <div className="relative flex w-full items-center justify-center text-foreground">
-      <svg viewBox="0 0 400 400" className="w-full max-w-[420px]" role="img" aria-label="Multi-agent network diagram">
+    <div
+      className={cn(
+        "relative flex w-full items-center justify-center text-foreground",
+        backdrop && "pointer-events-none absolute inset-0 opacity-[0.45]",
+      )}
+      aria-hidden={backdrop || undefined}
+    >
+      <svg
+        viewBox="0 0 400 400"
+        className={cn("w-full max-w-[420px]", backdrop && "h-full w-auto max-w-none")}
+        role="img"
+        aria-label="Multi-agent network diagram"
+      >
         {/* Outer MCP tool ring (slow rotation) */}
         <motion.g
           style={{ transformOrigin: "200px 200px" }}
@@ -320,9 +334,11 @@ function AgentNetwork() {
         </text>
       </svg>
 
-      <span className="pointer-events-none absolute bottom-0 right-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70">
-        60+ MCP tools
-      </span>
+      {!backdrop && (
+        <span className="pointer-events-none absolute bottom-0 right-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70">
+          60+ MCP tools
+        </span>
+      )}
     </div>
   )
 }
@@ -364,8 +380,29 @@ function WindowFrame({
   )
 }
 
+function CoverFrame({ visual, className }: { visual: Visual; className?: string }) {
+  return (
+    <div className={cn("overflow-hidden rounded-xl border border-border bg-card shadow-2xl shadow-black/30", className)}>
+      <img src={visual.src} alt={visual.alt} loading="lazy" className="aspect-[4/5] w-full object-cover" />
+    </div>
+  )
+}
+
 function ProjectVisual({ project }: { project: Project }) {
-  if (project.kind === "graphic") return <AgentNetwork />
+  if (project.kind === "graphic") {
+    const [a, b] = project.visuals
+    if (!a || !b) return <AgentNetwork />
+    return (
+      <div className="relative flex h-[360px] w-full max-w-[460px] items-center justify-center">
+        <AgentNetwork backdrop />
+        <CoverFrame visual={a} className="relative z-10 w-[184px] -rotate-3" />
+        <CoverFrame visual={b} className="relative z-0 -ml-9 mt-14 w-[184px] rotate-3 opacity-95" />
+        <span className="pointer-events-none absolute inset-x-0 bottom-0 text-center font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70">
+          Sample outputs · fully autonomous runs
+        </span>
+      </div>
+    )
+  }
 
   if (project.kind === "phone") {
     const [a, b] = project.visuals
