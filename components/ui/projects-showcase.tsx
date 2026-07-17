@@ -22,6 +22,7 @@ interface Visual {
   src: string
   alt: string
   fit?: "cover" | "contain"
+  credit?: string
 }
 
 interface Project {
@@ -188,8 +189,16 @@ const projects: Project[] = [
     tech: ["PyRadiomics", "U-Net", "SVM", "Random Forest", "Medical Imaging"],
     kind: "web",
     visuals: [
-      { src: withBase("/medical-ai-diagnostic-interface.png"), alt: "Medical AI diagnostic interface" },
-      { src: withBase("/u-net-tumor-segmentation.png"), alt: "U-Net tumor segmentation results" },
+      {
+        src: withBase("/medical/breast-mri-axial-1.jpg"),
+        alt: "Axial breast MRI slice, fused T1/T2/IDEAL sequence — the imaging modality analyzed in this project",
+        credit: "MRI: Nevit Dilmen, CC BY-SA 3.0",
+      },
+      {
+        src: withBase("/medical/breast-mri-axial-2.jpg"),
+        alt: "Axial breast MRI slice, fused T1/T2/IDEAL sequence",
+        credit: "MRI: Nevit Dilmen, CC BY-SA 3.0",
+      },
     ],
   },
   {
@@ -443,11 +452,16 @@ function ProjectVisual({ project }: { project: Project }) {
 
   const [main, secondary] = project.visuals
   return (
-    <div className="relative w-full max-w-[440px]">
+    <div className="relative w-full max-w-[440px] pb-6">
       {secondary ? (
         <WindowFrame visual={secondary} className="absolute -right-5 -top-8 w-[58%] rotate-2 opacity-80" />
       ) : null}
       {main ? <WindowFrame visual={main} className="relative w-full" /> : null}
+      {main?.credit ? (
+        <span className="pointer-events-none absolute inset-x-0 bottom-0 text-center font-mono text-[10px] text-muted-foreground/60">
+          {main.credit}
+        </span>
+      ) : null}
     </div>
   )
 }
