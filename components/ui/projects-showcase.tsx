@@ -44,7 +44,7 @@ const projects: Project[] = [
   {
     id: "fethiverse",
     name: "Fethiverse",
-    title: "Multi-Agent Content Pipeline",
+    title: "Multi-Agent Content Factory",
     meta: "Solo build · Claude Agent SDK",
     description:
       "An autonomous content-production system built on the Claude Agent SDK. Nine personality-driven agents — research, copywriting, art direction, and an editorial review loop — collaborate through peer messaging to plan, write, illustrate, and ship content end to end.",
