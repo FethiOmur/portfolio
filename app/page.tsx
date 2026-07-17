@@ -2,9 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
-import { FeatureCarousel } from "@/components/ui/animated-feature-carousel"
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
-const withBase = (p: string) => (p.startsWith("http") ? p : `${basePath}${p}`)
+import { ProjectsShowcase } from "@/components/ui/projects-showcase"
 import { SplashCursor } from "@/components/ui/splash-cursor"
 
 export default function Home() {
@@ -283,25 +281,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="thoughts" ref={(el) => { sectionsRef.current[2] = el }} className="min-h-screen py-32">
-          <div className="space-y-16">
-            <h2 className="text-4xl font-light">Projects</h2>
-
-            <FeatureCarousel
-              image={{
-                alt: "AI Project Screenshot",
-                step1img1: withBase("/llm-fine-tuning-dashboard.png"),
-                step1img2: withBase("/ai-model-training-interface.png"),
-                step2img1: withBase("/smart-parking-iot.png"),
-                step2img2: withBase("/mobile-app-interface.png"),
-                step3img: withBase("/unity-interface.png"),
-                step4img: withBase("/ai-data-pipeline.png"),
-                step5img: withBase("/unity-interface.png"),
-                step6img1: withBase("/unity-interface.png"),
-                step6img2: withBase("/mobile-app-interface.png"),
-              }}
-            />
-          </div>
+        <section id="thoughts" ref={(el) => { sectionsRef.current[2] = el }} className="relative">
+          <ProjectsShowcase />
         </section>
 
         <section id="connect" ref={(el) => { sectionsRef.current[3] = el }} className="py-32">
