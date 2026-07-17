@@ -28,6 +28,7 @@ interface Project {
   id: string
   name: string
   title: string
+  tagline?: string
   meta: string
   status?: string
   description: string
@@ -69,20 +70,20 @@ const projects: Project[] = [
   {
     id: "routerush",
     name: "RouteRush",
-    title: "Territory Game on a Live 3D Globe",
-    meta: "Solo — design, iOS, backend & economy",
+    title: "RouteRush",
+    tagline: "Territory conquest on a live 3D globe",
+    meta: "Consumer subscription iOS app · built end-to-end solo",
     status: "Launch-ready — preparing App Store release",
     description:
-      "A consumer subscription app built end-to-end solo. RouteRush turns running and cycling into a territory game on a live 3D globe — move through the world to claim H3 hexagonal cells and defend your dominance.",
+      "A gamified fitness app that turns runs and rides into territory conquest on a live 3D globe — claim H3 hex cells, earn Rush Points, climb cohort leagues, train with an AI coach. Designed, built, and taken to launch entirely solo.",
     highlights: [
-      "Consumer subscription app shipped end-to-end solo",
-      "StoreKit 2 subscription layer",
-      "Server-authoritative game economy on Supabase (anti-cheat)",
-      "Mapbox 3D globe with smooth globe-to-street zoom",
-      "H3 hexagonal territory scoring & real-time GPS",
-      "46 test files",
+      "~111k lines of Swift · ~500 source files · 92 test files",
+      "StoreKit 2 subscriptions with server-side entitlement sync",
+      "Server-authoritative economy & anti-cheat in Postgres (98 migrations, 74 tables)",
+      "Mapbox 3D globe · H3 hex-cell conquest · realtime territory updates",
+      "Cohort leagues, AI coach “Boldi”, HealthKit, offline-first queue",
     ],
-    tech: ["Swift", "SwiftUI", "StoreKit 2", "Mapbox 3D", "Supabase", "PostGIS", "H3 Geospatial", "iOS"],
+    tech: ["Swift", "SwiftUI", "StoreKit 2", "Mapbox 3D", "Supabase", "H3 Geospatial", "HealthKit", "Realtime", "Edge Functions"],
     kind: "phone",
     visuals: [
       { src: withBase("/routerush/rr-globe-view.png"), alt: "RouteRush 3D globe view" },
@@ -418,9 +419,10 @@ function TechChips({ tech }: { tech: string[] }) {
 
 function ProjectInfo({ project }: { project: Project }) {
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <div className="font-mono text-xs tracking-wider text-muted-foreground">{project.meta}</div>
       <h3 className="text-3xl font-light tracking-tight lg:text-4xl">{project.title}</h3>
+      {project.tagline ? <div className="text-lg text-muted-foreground">{project.tagline}</div> : null}
       {project.status ? (
         <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
           <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
