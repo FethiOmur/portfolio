@@ -35,7 +35,7 @@ interface Project {
   highlights: string[]
   tech: string[]
   link?: { label: string; href: string }
-  stages?: string[]
+  stages?: { label: string; sub?: string }[]
   modules?: string[]
   kind: VisualKind
   visuals: Visual[]
@@ -73,26 +73,6 @@ const projects: Project[] = [
     ],
   },
   {
-    id: "faculty-quiz",
-    name: "The Faculty",
-    title: "AI Quiz Generator",
-    tagline: "Study material in, validated exam questions out",
-    meta: "SmartCreative SRL · solo build",
-    description:
-      "A production pipeline for an Italian ed-tech app that turns source PDFs and spreadsheets into validated multiple-choice exam questions. Specialized agents analyze the material, draft questions, engineer plausible distractors, and validate every item — all grounded in a RAG layer over the source content.",
-    highlights: [
-      "Multi-agent chain: content analyzer → question generator → distractor engineer → cross-model validator",
-      "RAG grounding with ChromaDB + sentence-transformer embeddings over source PDFs/Excel",
-      "Quality control: semantic dedup, self-critique & surgical-repair loops, Bloom's-taxonomy difficulty",
-      "236 commits solo · 155 test files · deployed on Google Cloud Run",
-      "Migrated off LangGraph to a hand-rolled orchestration layer",
-    ],
-    tech: ["Python", "Gemini API", "ChromaDB", "Sentence-Transformers", "RAG", "PyMuPDF", "Cloud Run", "pytest"],
-    stages: ["PDF / Excel source", "Content Analyzer", "Question Generator", "Distractor Engineer", "Cross-Model Validator", "Validated MCQ"],
-    kind: "pipeline",
-    visuals: [],
-  },
-  {
     id: "routerush",
     name: "RouteRush",
     title: "RouteRush",
@@ -114,6 +94,33 @@ const projects: Project[] = [
       { src: withBase("/routerush/rr-globe-view.png"), alt: "RouteRush 3D globe view" },
       { src: withBase("/routerush/rr-route.png"), alt: "RouteRush route tracking" },
     ],
+  },
+  {
+    id: "faculty-quiz",
+    name: "The Faculty",
+    title: "AI Quiz Generator",
+    tagline: "Study material in, validated exam questions out",
+    meta: "SmartCreative SRL · solo build",
+    description:
+      "A production pipeline for an Italian ed-tech app that turns source PDFs and spreadsheets into validated multiple-choice exam questions. Specialized agents analyze the material, draft questions, engineer plausible distractors, and validate every item — all grounded in a RAG layer over the source content.",
+    highlights: [
+      "Multi-agent chain: content analyzer → question generator → distractor engineer → cross-model validator",
+      "RAG grounding with ChromaDB + sentence-transformer embeddings over source PDFs/Excel",
+      "Quality control: semantic dedup, self-critique & surgical-repair loops, Bloom's-taxonomy difficulty",
+      "236 commits solo · 155 test files · deployed on Google Cloud Run",
+      "Migrated off LangGraph to a hand-rolled orchestration layer",
+    ],
+    tech: ["Python", "Gemini API", "ChromaDB", "Sentence-Transformers", "RAG", "PyMuPDF", "Cloud Run", "pytest"],
+    stages: [
+      { label: "PDF / Excel source", sub: "raw study material" },
+      { label: "Content Analyzer", sub: "RAG · ChromaDB retrieval" },
+      { label: "Question Generator", sub: "Gemini" },
+      { label: "Distractor Engineer", sub: "plausible wrong answers" },
+      { label: "Cross-Model Validator", sub: "self-critique · surgical repair" },
+      { label: "Validated MCQ", sub: "ships to The Faculty app" },
+    ],
+    kind: "pipeline",
+    visuals: [],
   },
   {
     id: "llmetric",
@@ -152,7 +159,12 @@ const projects: Project[] = [
       "Adapter design isolates the flight-data engine so a second source can slot in",
     ],
     tech: ["Python", "FastMCP", "MCP", "Pydantic", "pytest"],
-    stages: ["Claude (LLM agent)", "MCP server", "Orchestration layer", "Flights engine"],
+    stages: [
+      { label: "Claude", sub: "LLM agent · natural-language query" },
+      { label: "MCP server", sub: "3 tools · FastMCP" },
+      { label: "Orchestration layer", sub: "nearby-airport fan-out · dedupe · rank" },
+      { label: "Flights engine", sub: "live Google Flights data" },
+    ],
     kind: "pipeline",
     visuals: [],
   },
@@ -516,30 +528,61 @@ function CoverFrame({
   )
 }
 
-function PipelineGraphic({ stages }: { stages: string[] }) {
+function FlowConnector({ delay = 0 }: { delay?: number }) {
   return (
-    <div className="flex w-full max-w-[340px] flex-col items-stretch text-foreground">
+    <svg width="16" height="26" viewBox="0 0 16 26" className="my-px text-foreground" aria-hidden="true">
+      <line x1="8" y1="1" x2="8" y2="25" stroke="currentColor" strokeOpacity="0.14" strokeWidth="1" />
+      {/* data packet drifting down the wire */}
+      <motion.circle
+        cx="8"
+        r="1.6"
+        fill="currentColor"
+        initial={{ cy: 3, opacity: 0 }}
+        animate={{ cy: [3, 23], opacity: [0, 0.65, 0] }}
+        transition={{ repeat: Infinity, duration: 1.6, delay, repeatDelay: 0.5, ease: "easeInOut" }}
+      />
+    </svg>
+  )
+}
+
+function PipelineGraphic({ stages }: { stages: { label: string; sub?: string }[] }) {
+  const last = stages.length - 1
+  return (
+    <div className="flex w-full max-w-[360px] flex-col items-stretch text-foreground">
       {stages.map((s, i) => (
-        <div key={s} className="flex flex-col items-center">
+        <div key={s.label} className="flex flex-col items-center">
           <motion.div
             initial={{ opacity: 0.4, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.06 * i, duration: 0.3, ease: EASE }}
+            transition={{ delay: 0.07 * i, duration: 0.35, ease: EASE }}
             className={cn(
-              "w-full rounded-lg border px-4 py-2.5 text-center text-sm shadow-sm",
-              i === 0 || i === stages.length - 1
-                ? "border-foreground/30 bg-foreground/5 text-foreground"
-                : "border-border bg-card/40 text-foreground/90",
+              "flex w-full items-center gap-3 rounded-xl border px-4 py-2.5 shadow-sm",
+              i === 0 || i === last
+                ? "border-foreground/25 bg-foreground/[0.05]"
+                : "border-border bg-card/40",
             )}
           >
-            {s}
+            <span className="font-mono text-[10px] tabular-nums text-muted-foreground/50">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span className="h-6 w-px bg-border/70" />
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm leading-tight text-foreground">{s.label}</span>
+              {s.sub ? (
+                <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-wider text-muted-foreground/70">
+                  {s.sub}
+                </span>
+              ) : null}
+            </span>
+            {i === last ? (
+              <motion.span
+                className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-foreground"
+                animate={{ opacity: [0.35, 1, 0.35] }}
+                transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
+              />
+            ) : null}
           </motion.div>
-          {i < stages.length - 1 ? (
-            <svg width="12" height="22" viewBox="0 0 12 22" className="my-0.5 text-muted-foreground" aria-hidden="true">
-              <line x1="6" y1="0" x2="6" y2="15" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1" />
-              <path d="M2.5 11 L6 16 L9.5 11" fill="none" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1" />
-            </svg>
-          ) : null}
+          {i < last ? <FlowConnector delay={i * 0.55} /> : null}
         </div>
       ))}
     </div>
