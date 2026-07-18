@@ -15,7 +15,7 @@ const withBase = (p: string) => (p.startsWith("http") ? p : `${basePath}${p}`)
 const EASE = [0.22, 1, 0.36, 1] as const
 
 // --- Types ---
-type VisualKind = "graphic" | "phone" | "web" | "store" | "pipeline" | "modules" | "device" | "posts"
+type VisualKind = "graphic" | "phone" | "web" | "store" | "pipeline" | "appshots" | "device" | "posts"
 
 interface Visual {
   src: string
@@ -36,7 +36,6 @@ interface Project {
   tech: string[]
   link?: { label: string; href: string }
   stages?: { label: string; sub?: string }[]
-  modules?: string[]
   kind: VisualKind
   visuals: Visual[]
 }
@@ -194,22 +193,26 @@ const projects: Project[] = [
   {
     id: "takvapp",
     name: "Takvapp",
-    title: "Islamic Companion App",
+    title: "Takvapp",
     tagline: "Prayer times, Quran, qibla & daily practice",
-    meta: "Flutter · co-developed",
+    meta: "Flutter · co-developed · Kur'an & Namaz",
+    status: "Live on the App Store — since Mar 2026",
     description:
-      "A cross-platform Islamic lifestyle app: prayer times, Quran reader, qibla compass, tasbih, Islamic calendar, and a daily content feed. Cache-first offline architecture, native home-screen widgets, and push notifications. Co-developed with another engineer — I set up the initial architecture and shipped feature modules through PR branches.",
+      "A cross-platform Islamic lifestyle app, live on the App Store as “Takvaapp – Kur'an & Namaz”: prayer times, a distraction-free Quran reader, qibla compass, tasbih, Islamic calendar, and a daily content feed. Co-developed with another engineer — I set up the initial architecture and shipped feature modules through PR branches.",
     highlights: [
+      "Live on the App Store (v1.0.7) — 4.7★ in the Turkish store",
       "184 Dart files across a clean feature-based architecture (BLoC)",
       "Native iOS WidgetKit + Android home-screen widgets",
       "Cache-first offline architecture (geohash-keyed) + OneSignal push",
-      "Background scheduling (workmanager) for prayer-time notifications",
       "Co-developed (two engineers) — initial architecture and multiple modules mine",
     ],
     tech: ["Flutter", "BLoC", "Dio", "OneSignal", "WidgetKit", "workmanager"],
-    modules: ["Prayer Times", "Quran", "Qibla", "Tasbih", "Calendar", "Esma", "Daily Content", "İlham Feed", "Statistics"],
-    kind: "modules",
-    visuals: [],
+    link: { label: "View on the App Store", href: "https://apps.apple.com/tr/app/takvaapp-kuran-namaz/id6758883523" },
+    kind: "appshots",
+    visuals: [
+      { src: withBase("/takvapp/appstore-1.jpg"), alt: "Takvapp App Store screenshot — Takva Yolunda Eşlikçiniz" },
+      { src: withBase("/takvapp/appstore-2.jpg"), alt: "Takvapp App Store screenshot — Namaz, Dua ve İlham Kaynağınız" },
+    ],
   },
   {
     id: "takvapp-stories",
@@ -589,28 +592,19 @@ function PipelineGraphic({ stages }: { stages: { label: string; sub?: string }[]
   )
 }
 
-function ModuleGridGraphic({ modules }: { modules: string[] }) {
-  return (
-    <div className="grid w-full max-w-[360px] grid-cols-3 gap-2.5 text-foreground">
-      {modules.map((m, i) => (
-        <motion.div
-          key={m}
-          initial={{ opacity: 0.4, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.04 * i, duration: 0.3, ease: EASE }}
-          className="flex aspect-square items-center justify-center rounded-lg border border-border bg-card/40 p-2 text-center text-xs leading-tight text-muted-foreground"
-        >
-          {m}
-        </motion.div>
-      ))}
-    </div>
-  )
-}
-
 function ProjectVisual({ project }: { project: Project }) {
   if (project.kind === "pipeline") return <PipelineGraphic stages={project.stages ?? []} />
 
-  if (project.kind === "modules") return <ModuleGridGraphic modules={project.modules ?? []} />
+  if (project.kind === "appshots") {
+    // Pre-designed App Store marketing screenshots (≈600×1300) — no extra bezel.
+    const [a, b] = project.visuals
+    return (
+      <div className="relative flex items-center justify-center">
+        {a ? <CoverFrame visual={a} aspect="aspect-[6/13]" className="relative z-10 w-[172px] -rotate-2" /> : null}
+        {b ? <CoverFrame visual={b} aspect="aspect-[6/13]" className="relative z-0 -ml-8 mt-10 w-[172px] rotate-2 opacity-95" /> : null}
+      </div>
+    )
+  }
 
   if (project.kind === "device") {
     const [a, b] = project.visuals
