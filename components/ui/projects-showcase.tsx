@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react"
 import {
-  AnimatePresence,
   motion,
   useScroll,
   useTransform,
@@ -16,7 +15,7 @@ const withBase = (p: string) => (p.startsWith("http") ? p : `${basePath}${p}`)
 const EASE = [0.22, 1, 0.36, 1] as const
 
 // --- Types ---
-type VisualKind = "graphic" | "phone" | "web" | "store"
+type VisualKind = "graphic" | "phone" | "web" | "store" | "pipeline" | "modules" | "device" | "posts"
 
 interface Visual {
   src: string
@@ -36,6 +35,8 @@ interface Project {
   highlights: string[]
   tech: string[]
   link?: { label: string; href: string }
+  stages?: string[]
+  modules?: string[]
   kind: VisualKind
   visuals: Visual[]
 }
@@ -72,6 +73,26 @@ const projects: Project[] = [
     ],
   },
   {
+    id: "faculty-quiz",
+    name: "The Faculty",
+    title: "AI Quiz Generator",
+    tagline: "Study material in, validated exam questions out",
+    meta: "SmartCreative SRL · solo build",
+    description:
+      "A production pipeline for an Italian ed-tech app that turns source PDFs and spreadsheets into validated multiple-choice exam questions. Specialized agents analyze the material, draft questions, engineer plausible distractors, and validate every item — all grounded in a RAG layer over the source content.",
+    highlights: [
+      "Multi-agent chain: content analyzer → question generator → distractor engineer → cross-model validator",
+      "RAG grounding with ChromaDB + sentence-transformer embeddings over source PDFs/Excel",
+      "Quality control: semantic dedup, self-critique & surgical-repair loops, Bloom's-taxonomy difficulty",
+      "236 commits solo · 155 test files · deployed on Google Cloud Run",
+      "Migrated off LangGraph to a hand-rolled orchestration layer",
+    ],
+    tech: ["Python", "Gemini API", "ChromaDB", "Sentence-Transformers", "RAG", "PyMuPDF", "Cloud Run", "pytest"],
+    stages: ["PDF / Excel source", "Content Analyzer", "Question Generator", "Distractor Engineer", "Cross-Model Validator", "Validated MCQ"],
+    kind: "pipeline",
+    visuals: [],
+  },
+  {
     id: "routerush",
     name: "RouteRush",
     title: "RouteRush",
@@ -97,21 +118,107 @@ const projects: Project[] = [
   {
     id: "llmetric",
     name: "LLMetric",
-    title: "AI Discovery & Comparison Platform",
-    meta: "Solo — frontend + multi-agent backend · 2024",
+    title: "LLM Benchmarking & Comparison",
+    tagline: "Track, compare, and visualize model performance",
+    meta: "Solo — Next.js + Supabase",
     description:
-      "A centralized platform that guides users to the right AI models and tools. Personalized recommendations from a conversational 'AI Finder', live side-by-side model testing in a 'Battle Arena', and a multi-agent backend for autonomous content generation.",
+      "A platform for tracking and comparing LLM benchmark performance: a model catalog, a custom radar-chart comparison view, side-by-side 'versus' pages, and an articles CMS — backed by Supabase, with an AgentQL scraping pipeline that keeps benchmark data current.",
     highlights: [
-      "Conversational 'AI Finder' for personalized recommendations",
-      "'Battle Arena' for live, side-by-side model testing",
-      "Continuously updated leaderboards & comparison pages",
-      "Multi-agent backend (Scraper, Editor, Manager) that delegate tasks",
+      "Custom radar-chart comparison (ModelRadarChart) for multi-model benchmark views",
+      "Side-by-side 'versus' comparison across models",
+      "Model catalog + articles/blog CMS with admin authoring",
+      "AgentQL scraping ETL keeps benchmark data fresh",
+      "Refactored (2026) from a 3-service stack to a unified Next.js + Supabase app",
     ],
-    tech: ["Python", "LangChain", "LangGraph", "Next.js", "Multi-Agent Systems", "LLM Integration"],
+    tech: ["Next.js", "TypeScript", "Supabase", "Recharts", "AgentQL", "Tailwind", "shadcn/ui"],
     kind: "web",
     visuals: [
-      { src: withBase("/llmetric-interface.png"), alt: "LLMetric search interface" },
-      { src: withBase("/llmetric-testimonials.png"), alt: "LLMetric testimonials and announcements" },
+      { src: withBase("/llmetric-interface.png"), alt: "LLMetric model interface" },
+      { src: withBase("/llmetric-testimonials.png"), alt: "LLMetric platform screen" },
+    ],
+  },
+  {
+    id: "flight-finder",
+    name: "Flight Finder MCP",
+    title: "Flight Finder MCP",
+    tagline: "Natural-language flight search as an MCP tool server",
+    meta: "Solo — Python + FastMCP",
+    description:
+      "A Model Context Protocol server that lets Claude search live flights conversationally. It wraps a third-party Google Flights engine behind a clean adapter and adds an orchestration layer — nearby-airport fan-out, flexible-date scanning, and diversity-aware ranking — exposing three tools an LLM agent calls directly.",
+    highlights: [
+      "3 MCP tools: search, cheapest-date scan, and booking-link lookup",
+      "Orchestration layer: nearby-airport fan-out, flexible-date scan, diversity ranking",
+      "Built test-first — 54 tests across unit, protocol, adapter & live-smoke suites",
+      "Adapter design isolates the flight-data engine so a second source can slot in",
+    ],
+    tech: ["Python", "FastMCP", "MCP", "Pydantic", "pytest"],
+    stages: ["Claude (LLM agent)", "MCP server", "Orchestration layer", "Flights engine"],
+    kind: "pipeline",
+    visuals: [],
+  },
+  {
+    id: "slapper",
+    name: "Slapper",
+    title: "Slapper",
+    tagline: "Slap your phone, hear the bass drop",
+    meta: "Solo — Flutter (iOS & Android)",
+    status: "Launch-ready — App Store submission prepared",
+    description:
+      "A viral-style entertainment app: physically slap or drop your phone to trigger force-scaled sound effects and haptics. A hybrid detection pipeline fuses accelerometer force with microphone dB spikes, a background service keeps drop-detection alive, and users can record their own sound packs.",
+    highlights: [
+      "Hybrid slap detection: accelerometer force + microphone dB-spike corroboration",
+      "Background service keeps drop-detection alive while the app is backgrounded",
+      "Apple in-app purchases — 5 sound-pack SKUs with restore",
+      "Custom 'Sound Studio' for recording user-made packs",
+      "Full App Store submission package: review notes, metadata, privacy & terms",
+    ],
+    tech: ["Flutter", "Dart", "sensors_plus", "audioplayers", "noise_meter", "in_app_purchase"],
+    kind: "device",
+    visuals: [
+      { src: withBase("/slapper/home.png"), alt: "Slapper onboarding — Slap Your Phone" },
+      { src: withBase("/slapper/sound-packs.png"), alt: "Slapper sound packs screen" },
+    ],
+  },
+  {
+    id: "takvapp",
+    name: "Takvapp",
+    title: "Islamic Companion App",
+    tagline: "Prayer times, Quran, qibla & daily practice",
+    meta: "Flutter · co-developed",
+    description:
+      "A cross-platform Islamic lifestyle app: prayer times, Quran reader, qibla compass, tasbih, Islamic calendar, and a daily content feed. Cache-first offline architecture, native home-screen widgets, and push notifications. Co-developed with another engineer — I set up the initial architecture and shipped feature modules through PR branches.",
+    highlights: [
+      "184 Dart files across a clean feature-based architecture (BLoC)",
+      "Native iOS WidgetKit + Android home-screen widgets",
+      "Cache-first offline architecture (geohash-keyed) + OneSignal push",
+      "Background scheduling (workmanager) for prayer-time notifications",
+      "Co-developed (two engineers) — initial architecture and multiple modules mine",
+    ],
+    tech: ["Flutter", "BLoC", "Dio", "OneSignal", "WidgetKit", "workmanager"],
+    modules: ["Prayer Times", "Quran", "Qibla", "Tasbih", "Calendar", "Esma", "Daily Content", "İlham Feed", "Statistics"],
+    kind: "modules",
+    visuals: [],
+  },
+  {
+    id: "takvapp-stories",
+    name: "Takvapp Stories",
+    title: "Daily Content Automation",
+    tagline: "Auto-published social content, every day, unattended",
+    meta: "Solo — Python automation · running in production",
+    description:
+      "An agentless Python pipeline that pulls the day's hadith, verse, and dua from Takvapp's backend, renders four branded 1080×1350 images with Pillow, and auto-publishes them to Instagram — scheduled daily via launchd with no human in the loop.",
+    highlights: [
+      "End-to-end: fetch → cache → render → upload → publish, unattended daily via launchd",
+      "85+ days of real published output (Mar–Jul 2026)",
+      "Branded rendering with Pillow: custom typography, per-day backgrounds, calligraphy overlay",
+      "Integrates Takvapp content APIs, imgbb hosting, and the Instagram Graph API",
+      "~1,700 lines across 13 focused modules with a proper CLI",
+    ],
+    tech: ["Python", "Pillow", "Instagram Graph API", "launchd", "uv"],
+    kind: "posts",
+    visuals: [
+      { src: withBase("/takvapp/story-hadith.jpg"), alt: "Auto-generated daily hadith post" },
+      { src: withBase("/takvapp/story-dua.jpg"), alt: "Auto-generated daily dua post" },
     ],
   },
   {
@@ -409,7 +516,79 @@ function CoverFrame({
   )
 }
 
+function PipelineGraphic({ stages }: { stages: string[] }) {
+  return (
+    <div className="flex w-full max-w-[340px] flex-col items-stretch text-foreground">
+      {stages.map((s, i) => (
+        <div key={s} className="flex flex-col items-center">
+          <motion.div
+            initial={{ opacity: 0.4, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.06 * i, duration: 0.3, ease: EASE }}
+            className={cn(
+              "w-full rounded-lg border px-4 py-2.5 text-center text-sm shadow-sm",
+              i === 0 || i === stages.length - 1
+                ? "border-foreground/30 bg-foreground/5 text-foreground"
+                : "border-border bg-card/40 text-foreground/90",
+            )}
+          >
+            {s}
+          </motion.div>
+          {i < stages.length - 1 ? (
+            <svg width="12" height="22" viewBox="0 0 12 22" className="my-0.5 text-muted-foreground" aria-hidden="true">
+              <line x1="6" y1="0" x2="6" y2="15" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1" />
+              <path d="M2.5 11 L6 16 L9.5 11" fill="none" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1" />
+            </svg>
+          ) : null}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function ModuleGridGraphic({ modules }: { modules: string[] }) {
+  return (
+    <div className="grid w-full max-w-[360px] grid-cols-3 gap-2.5 text-foreground">
+      {modules.map((m, i) => (
+        <motion.div
+          key={m}
+          initial={{ opacity: 0.4, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.04 * i, duration: 0.3, ease: EASE }}
+          className="flex aspect-square items-center justify-center rounded-lg border border-border bg-card/40 p-2 text-center text-xs leading-tight text-muted-foreground"
+        >
+          {m}
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
 function ProjectVisual({ project }: { project: Project }) {
+  if (project.kind === "pipeline") return <PipelineGraphic stages={project.stages ?? []} />
+
+  if (project.kind === "modules") return <ModuleGridGraphic modules={project.modules ?? []} />
+
+  if (project.kind === "device") {
+    const [a, b] = project.visuals
+    return (
+      <div className="relative flex items-center justify-center">
+        {a ? <img src={a.src} alt={a.alt} loading="lazy" className="relative z-10 w-[170px] -rotate-3 drop-shadow-2xl" /> : null}
+        {b ? <img src={b.src} alt={b.alt} loading="lazy" className="relative z-0 -ml-10 mt-10 w-[170px] rotate-3 opacity-95 drop-shadow-2xl" /> : null}
+      </div>
+    )
+  }
+
+  if (project.kind === "posts") {
+    const [a, b] = project.visuals
+    return (
+      <div className="relative flex items-center justify-center">
+        {a ? <CoverFrame visual={a} className="relative z-10 w-[172px] -rotate-3" /> : null}
+        {b ? <CoverFrame visual={b} className="relative z-0 -ml-9 mt-12 w-[172px] rotate-3 opacity-95" /> : null}
+      </div>
+    )
+  }
+
   if (project.kind === "graphic") {
     const [a, b] = project.visuals
     if (!a || !b) return <AgentNetwork />
@@ -561,7 +740,7 @@ export function ProjectsShowcase() {
       </div>
 
       {/* Desktop: pinned scrollytelling */}
-      <div ref={scrollRef} className="relative hidden lg:block" style={{ height: `${N * 100}vh` }}>
+      <div ref={scrollRef} className="relative hidden lg:block" style={{ height: `${N * 72}vh` }}>
         <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden py-20">
           {/* progress header */}
           <div className="mb-10 flex items-center gap-4">
@@ -577,31 +756,25 @@ export function ProjectsShowcase() {
           {/* content */}
           <div className="grid grid-cols-12 items-center gap-8">
             <div className="col-span-6 lg:col-span-5">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeProject.id}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -16 }}
-                  transition={{ duration: 0.35, ease: EASE }}
-                >
-                  <ProjectInfo project={activeProject} />
-                </motion.div>
-              </AnimatePresence>
+              <motion.div
+                key={activeProject.id}
+                initial={{ opacity: 0.6, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, ease: EASE }}
+              >
+                <ProjectInfo project={activeProject} />
+              </motion.div>
             </div>
             <div className="col-span-6 flex min-h-[46vh] items-center justify-center lg:col-span-7">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeProject.id}
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.4, ease: EASE }}
-                  className="flex w-full items-center justify-center"
-                >
-                  <ProjectVisual project={activeProject} />
-                </motion.div>
-              </AnimatePresence>
+              <motion.div
+                key={activeProject.id}
+                initial={{ opacity: 0.6, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.25, ease: EASE }}
+                className="flex w-full items-center justify-center"
+              >
+                <ProjectVisual project={activeProject} />
+              </motion.div>
             </div>
           </div>
 
