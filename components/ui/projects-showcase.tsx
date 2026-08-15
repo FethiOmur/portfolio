@@ -81,13 +81,15 @@ const projects: Project[] = [
     description:
       "A gamified fitness app that turns runs and rides into territory conquest on a live 3D globe — claim H3 hex cells, earn Rush Points, climb cohort leagues, train with an AI coach. Designed, built, and taken to launch entirely solo.",
     highlights: [
-      "~111k lines of Swift · ~500 source files · 92 test files",
-      "StoreKit 2 subscriptions with server-side entitlement sync",
-      "Server-authoritative economy & anti-cheat in Postgres (98 migrations, 74 tables)",
-      "Mapbox 3D globe · H3 hex-cell conquest · realtime territory updates",
+      "~111k lines of Swift · ~500 files · 92 test files",
+      "StoreKit 2 subscriptions, server-side entitlement sync",
+      "Server-authoritative economy in Postgres — 98 migrations, 74 tables",
+      "Mapbox 3D globe · H3 hex-cell conquest · realtime updates",
       "Cohort leagues, AI coach “Boldi”, HealthKit, offline-first queue",
+      "6-language marketing site, hand-built static — routerushapp.com",
     ],
     tech: ["Swift", "SwiftUI", "StoreKit 2", "Mapbox 3D", "Supabase", "H3 Geospatial", "HealthKit", "Realtime", "Edge Functions"],
+    link: { label: "Visit routerushapp.com", href: "https://routerushapp.com" },
     kind: "phone",
     visuals: [
       { src: withBase("/routerush/rr-globe-view.png"), alt: "RouteRush 3D globe view" },
