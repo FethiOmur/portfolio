@@ -55,6 +55,7 @@ const projects: Project[] = [
       "Self-learning knowledge store",
       "AI image-generation pipeline",
       "2,000+ automated tests",
+      "Adapted into a production client deployment (Italian ed-tech) — LangGraph graph, Cloud Run Jobs, Notion approval gate, review dashboard",
     ],
     tech: [
       "Claude Agent SDK",
@@ -122,6 +123,50 @@ const projects: Project[] = [
     ],
     kind: "pipeline",
     visuals: [],
+  },
+  {
+    id: "faculty-tutor",
+    name: "AI Tutor",
+    title: "AI Tutor",
+    tagline: "RAG assistant live on the University of Ferrara's course pages",
+    meta: "SmartCreative SRL · The Faculty · lead developer (90 of 95 commits)",
+    status: "In production — corsi.unife.it",
+    description:
+      "An Italian-language retrieval-augmented chatbot embedded on the University of Ferrara's official course pages, answering prospective students with citations grounded in scraped, embedded course material. Built end-to-end — ingestion pipeline, vector retrieval, Fastify API, React chat widget — and shipped to Google Cloud Run with CI/CD.",
+    highlights: [
+      "Scrape → chunk → Gemini embed → MongoDB Atlas Vector Search, with grounded citations",
+      "Move from in-memory cosine search to Atlas Vector Search documented in dated ADRs",
+      "Scheduled Cloud Run ingestion job keeps the corpus fresh, decoupled from serving",
+      "Fastify + TypeScript API · React 19 widget · 19 backend test files (Vitest)",
+      "Deployed on Google Cloud Run via Bitbucket Pipelines CI/CD",
+    ],
+    tech: ["TypeScript", "Fastify", "React 19", "Gemini", "MongoDB Atlas Vector Search", "Cloud Run", "Vitest"],
+    kind: "web",
+    visuals: [
+      { src: withBase("/faculty/ai-tutor-live.jpg"), alt: "AI Tutor chat widget live on the University of Ferrara nursing course page" },
+    ],
+  },
+  {
+    id: "faculty-admissions",
+    name: "Admissions RAG",
+    title: "Admissions RAG",
+    tagline: "From scraped bandi to cited answers, at university scale",
+    meta: "SmartCreative SRL · The Faculty · solo build",
+    status: "In production — Cloud Run",
+    description:
+      "A two-stage system for Italian university admissions: an agentic crawl (Firecrawl + Cloudflare rendering) feeds one large-context Gemini call per program to extract admission rules with mandatory evidence and confidence thresholds. The resulting corpus powers a FastAPI RAG chatbot — pgvector retrieval, Gemini generation, page-level citations, session-aware query rewriting, and university-scoped filtering.",
+    highlights: [
+      "5,056 university programs analyzed · 15,935 admission-notice documents cataloged",
+      "Evidence-mandatory LLM extraction with confidence thresholds — no hallucinated rules",
+      "pgvector on Cloud SQL + Gemini embeddings → answers with [S1]-style page citations",
+      "Session-aware query rewriting resolves follow-ups without storing chat history",
+      "Intent routing + hard university-scoped retrieval · 12 backend test files",
+    ],
+    tech: ["Python", "FastAPI", "Gemini", "pgvector", "Cloud SQL", "Firecrawl", "Cloud Run", "pytest"],
+    kind: "web",
+    visuals: [
+      { src: withBase("/faculty/admissions-rag-citations.jpg"), alt: "Admissions RAG chatbot answering with page-level citations from Politecnico admission notices" },
+    ],
   },
   {
     id: "llmetric",
