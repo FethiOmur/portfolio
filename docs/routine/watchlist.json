@@ -1,0 +1,18 @@
+{
+  "_comment": "Manually maintained fallback for the weekly projects routine. This session's GitHub access is repository-scoped and cannot list FethiOmur's repos account-wide (api.github.com/users/FethiOmur/repos and /search/repositories both return 403 regardless of what's in scope). As a workaround, the routine checks each repo below individually via the repo-scoped endpoint (api.github.com/repos/{owner}/{repo}), which works IF that repo has been added to this session's/trigger's GitHub repository access list. Add a new entry here whenever a new public project repo is created, and add that same repo to the session's repository access list (Claude Code on the web -> this scheduled task's environment/trigger settings -> repository access) at the same time -- this file alone does not grant access.",
+  "repos": [
+    { "repo": "FethiOmur/agent_Army", "project_id": "fethiverse" },
+    { "repo": "FethiOmur/routerush", "project_id": "routerush" },
+    { "repo": "FethiOmur/faculty-quiz", "project_id": "faculty-quiz" },
+    { "repo": "FethiOmur/LLMetrik", "project_id": "llmetric" },
+    { "repo": "FethiOmur/flight-finder", "project_id": "flight-finder" },
+    { "repo": "FethiOmur/slapper", "project_id": "slapper" },
+    { "repo": "FethiOmur/takvapp", "project_id": "takvapp" },
+    { "repo": "FethiOmur/takvapp-stories", "project_id": "takvapp-stories" },
+    { "repo": "FethiOmur/inodea", "project_id": "inodea" },
+    { "repo": "FethiOmur/satellite", "project_id": "satellite" },
+    { "repo": "FethiOmur/nerox", "project_id": "nerox" },
+    { "repo": "FethiOmur/medical", "project_id": "medical" },
+    { "repo": "FethiOmur/gaming", "project_id": "gaming" }
+  ]
+}
