@@ -1,0 +1,285 @@
+{
+  "generated_at": "2026-09-18T15:38:58Z",
+  "owner": "FethiOmur",
+  "repos": [
+    {
+      "name": "portfolio",
+      "full_name": "FethiOmur/portfolio",
+      "html_url": "https://github.com/FethiOmur/portfolio",
+      "description": "Personal portfolio (Next.js static export for GitHub Pages)",
+      "language": "TypeScript",
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2025-08-25T01:36:23Z",
+      "pushed_at": "2026-09-18T15:38:44Z",
+      "updated_at": "2026-09-18T15:38:49Z",
+      "stargazers_count": 0,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 49
+        },
+        {
+          "login": "claude",
+          "contributions": 4
+        },
+        {
+          "login": "github-actions[bot]",
+          "contributions": 1
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 0.9074,
+      "is_owner_majority": true
+    },
+    {
+      "name": "FethiOmur",
+      "full_name": "FethiOmur/FethiOmur",
+      "html_url": "https://github.com/FethiOmur/FethiOmur",
+      "description": null,
+      "language": null,
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2025-09-07T17:05:30Z",
+      "pushed_at": "2026-09-18T04:14:50Z",
+      "updated_at": "2026-08-15T17:35:48Z",
+      "stargazers_count": 1,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 72
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 1.0,
+      "is_owner_majority": true
+    },
+    {
+      "name": "RouteRush-web",
+      "full_name": "FethiOmur/RouteRush-web",
+      "html_url": "https://github.com/FethiOmur/RouteRush-web",
+      "description": "RouteRush marketing site \u2014 routerush.app",
+      "language": "HTML",
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2026-07-29T22:33:09Z",
+      "pushed_at": "2026-09-09T19:51:45Z",
+      "updated_at": "2026-09-09T19:52:05Z",
+      "stargazers_count": 0,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 86
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 1.0,
+      "is_owner_majority": true
+    },
+    {
+      "name": "RouteRush-legal",
+      "full_name": "FethiOmur/RouteRush-legal",
+      "html_url": "https://github.com/FethiOmur/RouteRush-legal",
+      "description": "RouteRush legal pages (privacy policy & terms of service)",
+      "language": "HTML",
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2026-06-14T18:50:37Z",
+      "pushed_at": "2026-07-11T11:12:55Z",
+      "updated_at": "2026-07-11T11:13:03Z",
+      "stargazers_count": 0,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 7
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 1.0,
+      "is_owner_majority": true
+    },
+    {
+      "name": "slapper_docs",
+      "full_name": "FethiOmur/slapper_docs",
+      "html_url": "https://github.com/FethiOmur/slapper_docs",
+      "description": null,
+      "language": "HTML",
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2026-03-31T23:33:32Z",
+      "pushed_at": "2026-03-31T23:43:47Z",
+      "updated_at": "2026-03-31T23:43:51Z",
+      "stargazers_count": 0,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 2
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 1.0,
+      "is_owner_majority": true
+    },
+    {
+      "name": "theFacultyDemo",
+      "full_name": "FethiOmur/theFacultyDemo",
+      "html_url": "https://github.com/FethiOmur/theFacultyDemo",
+      "description": null,
+      "language": "Dart",
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2025-12-22T00:59:03Z",
+      "pushed_at": "2025-12-22T01:37:41Z",
+      "updated_at": "2025-12-22T01:37:45Z",
+      "stargazers_count": 0,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 4
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 1.0,
+      "is_owner_majority": true
+    },
+    {
+      "name": "Huso_AI_Recruiter",
+      "full_name": "FethiOmur/Huso_AI_Recruiter",
+      "html_url": "https://github.com/FethiOmur/Huso_AI_Recruiter",
+      "description": null,
+      "language": "TypeScript",
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2025-11-25T17:55:02Z",
+      "pushed_at": "2025-11-25T17:58:33Z",
+      "updated_at": "2025-11-25T17:58:37Z",
+      "stargazers_count": 0,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 3
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 1.0,
+      "is_owner_majority": true
+    },
+    {
+      "name": "GrantSpider_Chatbot",
+      "full_name": "FethiOmur/GrantSpider_Chatbot",
+      "html_url": "https://github.com/FethiOmur/GrantSpider_Chatbot",
+      "description": null,
+      "language": "TypeScript",
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2025-06-15T14:21:31Z",
+      "pushed_at": "2025-09-17T23:57:01Z",
+      "updated_at": "2025-09-17T23:57:07Z",
+      "stargazers_count": 0,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 4
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 1.0,
+      "is_owner_majority": true
+    },
+    {
+      "name": "Python-Lab1Exercise",
+      "full_name": "FethiOmur/Python-Lab1Exercise",
+      "html_url": "https://github.com/FethiOmur/Python-Lab1Exercise",
+      "description": "Python-Lab1Exercise on PoliTo",
+      "language": "Python",
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2022-12-26T11:28:27Z",
+      "pushed_at": "2022-12-29T14:29:32Z",
+      "updated_at": "2022-12-29T14:29:36Z",
+      "stargazers_count": 0,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 2
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 1.0,
+      "is_owner_majority": true
+    },
+    {
+      "name": "Python-Lab3Exercise",
+      "full_name": "FethiOmur/Python-Lab3Exercise",
+      "html_url": "https://github.com/FethiOmur/Python-Lab3Exercise",
+      "description": null,
+      "language": "Python",
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2022-12-26T17:44:25Z",
+      "pushed_at": "2022-12-29T14:27:03Z",
+      "updated_at": "2022-12-29T14:27:07Z",
+      "stargazers_count": 0,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 2
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 1.0,
+      "is_owner_majority": true
+    },
+    {
+      "name": "PatikadevPractices2",
+      "full_name": "FethiOmur/PatikadevPractices2",
+      "html_url": "https://github.com/FethiOmur/PatikadevPractices2",
+      "description": "www.patika.dev",
+      "language": "C#",
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2022-04-13T13:46:08Z",
+      "pushed_at": "2022-04-13T13:46:12Z",
+      "updated_at": "2022-04-13T13:46:16Z",
+      "stargazers_count": 0,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 1
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 1.0,
+      "is_owner_majority": true
+    },
+    {
+      "name": "Patika-dev-Odev-1",
+      "full_name": "FethiOmur/Patika-dev-Odev-1",
+      "html_url": "https://github.com/FethiOmur/Patika-dev-Odev-1",
+      "description": "www.patika.dev - Unity Essentials ",
+      "language": null,
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2022-04-06T13:44:41Z",
+      "pushed_at": "2022-04-06T13:44:42Z",
+      "updated_at": "2022-04-06T13:44:41Z",
+      "stargazers_count": 0,
+      "contributors": [],
+      "top_contributor_login": null,
+      "top_contributor_share": null,
+      "is_owner_majority": false
+    }
+  ]
+}
