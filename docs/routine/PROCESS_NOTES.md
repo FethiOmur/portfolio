@@ -1,5 +1,29 @@
 # Routine process notes — GitHub access workaround
 
+**Update 2026-09-18 (later same day):** added a real fix, not just a
+workaround. `.github/workflows/repo-manifest.yml` runs weekly (Sundays
+04:17 UTC, plus `workflow_dispatch` for on-demand runs) on GitHub's own
+Actions infrastructure — outside this session's constrained proxy — and
+writes `docs/routine/repos-manifest.json`: every non-fork repo under
+FethiOmur, with GitHub's own contributor stats (`top_contributor_login`,
+`top_contributor_share`, `is_owner_majority`). **Future runs of this
+routine should read that file directly for steps 2-4 (discovery +
+ownership check) instead of calling the GitHub API at all.** Only fall
+back to the account-wide call (and then to `watchlist.json` below) if
+`repos-manifest.json` is missing or looks stale (`generated_at` older than
+~10 days, meaning the Actions workflow itself stopped running — flag that
+in the report, it's a separate problem from session scope).
+
+`is_owner_majority` is a heuristic (>50% of GitHub-attributed
+contributions by login `FethiOmur`) — still spot-check anything borderline
+or unusual before adding it as a project, same as the original process's
+"VERIFY OWNERSHIP" step intends.
+
+---
+
+The section below is the original (now secondary) workaround, kept for the
+case the manifest workflow itself is ever unavailable.
+
 The scheduled task's own instructions (step 2) call
 `curl https://api.github.com/users/FethiOmur/repos?...` to discover new
 repos. As of 2026-09-11 and again 2026-09-18, this session's GitHub proxy
