@@ -19,6 +19,29 @@ contributions by login `FethiOmur`) — still spot-check anything borderline
 or unusual before adding it as a project, same as the original process's
 "VERIFY OWNERSHIP" step intends.
 
+**Important finding from the first real run (2026-09-18):** the manifest
+only ever lists **public** repos — same as the account-wide API would,
+token or no token, since a GitHub Actions `GITHUB_TOKEN` is scoped to the
+checked-out repo only and cannot see anyone's private repos. None of the
+"existing project ids" repos named in the task prompt (agent_Army,
+routerush, faculty-quiz, LLMetrik, flight-finder, slapper, takvapp,
+takvapp-stories, inodea, satellite, nerox, medical, gaming) showed up in
+the first manifest — they are almost certainly **private**. So this
+workflow can only ever discover brand-new *public* repos (candidate rule
+(a) in the task prompt) or verify updates to existing projects that happen
+to be public; it cannot check for "major new milestones" on the private
+project repos (candidate rule (b)) — that would need this session
+specifically granted access to that one private repo, same constraint as
+before, just narrowed to one named repo instead of the whole account.
+
+First real manifest (run #2, 2026-09-18) surfaced 12 public non-fork
+repos, of which two were not yet represented on the site at all and are
+plausible future candidates once verified: `Huso_AI_Recruiter` and
+`GrantSpider_Chatbot` (both `is_owner_majority: true`). Not added this
+session — content curation (verifying facts, writing copy, sourcing
+images) is a separate step from fixing discovery, left for the next run
+unless asked to do it now.
+
 ---
 
 The section below is the original (now secondary) workaround, kept for the
