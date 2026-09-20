@@ -1,38 +1,7 @@
 {
-  "generated_at": "2026-09-18T15:38:58Z",
+  "generated_at": "2026-09-20T09:17:42Z",
   "owner": "FethiOmur",
   "repos": [
-    {
-      "name": "portfolio",
-      "full_name": "FethiOmur/portfolio",
-      "html_url": "https://github.com/FethiOmur/portfolio",
-      "description": "Personal portfolio (Next.js static export for GitHub Pages)",
-      "language": "TypeScript",
-      "topics": [],
-      "private": false,
-      "archived": false,
-      "created_at": "2025-08-25T01:36:23Z",
-      "pushed_at": "2026-09-18T15:38:44Z",
-      "updated_at": "2026-09-18T15:38:49Z",
-      "stargazers_count": 0,
-      "contributors": [
-        {
-          "login": "FethiOmur",
-          "contributions": 49
-        },
-        {
-          "login": "claude",
-          "contributions": 4
-        },
-        {
-          "login": "github-actions[bot]",
-          "contributions": 1
-        }
-      ],
-      "top_contributor_login": "FethiOmur",
-      "top_contributor_share": 0.9074,
-      "is_owner_majority": true
-    },
     {
       "name": "FethiOmur",
       "full_name": "FethiOmur/FethiOmur",
@@ -43,7 +12,7 @@
       "private": false,
       "archived": false,
       "created_at": "2025-09-07T17:05:30Z",
-      "pushed_at": "2026-09-18T04:14:50Z",
+      "pushed_at": "2026-09-20T04:30:25Z",
       "updated_at": "2026-08-15T17:35:48Z",
       "stargazers_count": 1,
       "contributors": [
@@ -54,6 +23,37 @@
       ],
       "top_contributor_login": "FethiOmur",
       "top_contributor_share": 1.0,
+      "is_owner_majority": true
+    },
+    {
+      "name": "portfolio",
+      "full_name": "FethiOmur/portfolio",
+      "html_url": "https://github.com/FethiOmur/portfolio",
+      "description": "Personal portfolio (Next.js static export for GitHub Pages)",
+      "language": "TypeScript",
+      "topics": [],
+      "private": false,
+      "archived": false,
+      "created_at": "2025-08-25T01:36:23Z",
+      "pushed_at": "2026-09-18T15:40:31Z",
+      "updated_at": "2026-09-18T15:40:36Z",
+      "stargazers_count": 0,
+      "contributors": [
+        {
+          "login": "FethiOmur",
+          "contributions": 49
+        },
+        {
+          "login": "claude",
+          "contributions": 6
+        },
+        {
+          "login": "github-actions[bot]",
+          "contributions": 2
+        }
+      ],
+      "top_contributor_login": "FethiOmur",
+      "top_contributor_share": 0.8596,
       "is_owner_majority": true
     },
     {
